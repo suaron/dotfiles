@@ -1,0 +1,179 @@
+call pathogen#infect()
+syntax on
+
+"Load the plugin and indent settings for the detected filetype
+filetype plugin indent on
+
+"Set Leader
+let mapleader = ","
+
+"Hide last search highlighting
+map <Leader>h :nohlsearch<CR>
+
+"Write with sudo with w!!
+cmap w!! w !sudo tee % >/dev/null
+
+"Show CommandT search panel
+map <Leader>f :CommandT<CR>
+let g:CommandTMaxHeight=20
+
+map <Leader>n :NERDTreeToggle<CR>
+
+"Show current file in NERDTree
+map <leader>r :NERDTreeFind<cr>
+
+"ZoomWin configuration
+map <Leader>z :ZoomWin<CR>
+
+"Ctrl-e expand Zend Coding
+let g:user_zen_expandabbr_key = '<c-e>'
+
+set history=1000
+
+"List auto detected file encoding
+set fileencodings=utf-8,cp1251,koi8-r,cp866
+
+"Default encoding
+set encoding=utf-8
+set termencoding=utf-8
+
+set showmode
+
+set t_Co=256
+if (&t_Co == 256) && !has('gui_running')
+  colorscheme vibrantink
+else
+  colorscheme railscasts+
+endif
+
+"Keep swp files under ~/.vim/swap
+set directory=~/.vim/swap
+
+"Turn off lazy redraw
+set nolazyredraw
+
+"Show ruler
+set ruler
+
+"Switch betwin buffers without savingl
+set hidden
+
+"Turn on wild menu
+set wildmenu
+
+"Tab completion
+set wildmode=list:longest,list:full
+set wildignore+=*.o,*.obj,.git,*.rbc
+
+"Show line numbers
+set number
+
+"Status Line
+set showcmd
+
+"Cursor highlights
+set cursorline
+
+"Turn off folding
+set nofoldenable
+
+"Invisible characters
+set listchars=tab:▸\ ,eol:¬
+
+"Status bar
+set statusline=%<%f%h%m%r\ %b\ %{fugitive#statusline()}%{&encoding}\ 0x\ \ %l,%c%V\ %P 
+set laststatus=2
+set sidescrolloff=2
+
+"Use mouse everywhere
+set mouse=a
+
+"Highlight search
+set hlsearch
+
+"Incremental search, search as you type
+set incsearch
+
+"Ignore case when searching
+set ignorecase
+
+"Ignore case when searching lowercase
+set smartcase
+
+"Automatic indent new lines
+set autoindent
+
+"Be smart about it
+set smartindent
+
+"Do not wrap lines
+set nowrap
+
+set softtabstop=2
+set shiftwidth=2
+set tabstop=4
+
+"Expand tabs to spaces
+set expandtab
+set nosmarttab
+
+"Support for numbered/bullet lists
+set formatoptions+=n
+
+" Allow virtual edit in visual block ..
+set virtualedit=block
+
+" Remember last location in file
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+    \| exe "normal g'\"" | endif
+endif
+
+function s:setupWrapping()
+  set wrap
+  set wrapmargin=2
+  set textwidth=72
+endfunction
+
+function s:setupMarkup()
+  call s:setupWrapping()
+  map <buffer> <Leader>p :Hammer<CR>
+endfunction
+
+au BufRead,BufNewFile {Gemfile,Rakefile,Thorfile,config.ru} set ft=ruby
+au BufRead,BufNewFile {.localrc,localrc} set ft=sh
+au BufRead,BufNewFile *.ru         set ft=ruby
+au BufRead,BufNewFile *.god        set ft=ruby
+au BufRead,BufNewFile *.sql        set ft=pgsql
+au BufRead,BufNewFile *.haml       set ft=haml
+au BufRead,BufNewFile *.{md,markdown,mdown,mkd,mkdn} call s:setupMarkup()
+
+au Filetype gitcommit set tw=80  spell
+au Filetype ruby      set ts=2
+
+set splitbelow splitright
+let g:HammerQuiet = 1
+
+"Disable bell
+set novisualbell
+set t_vb=   
+
+"Fix <Enter> for comment
+set fo+=cr
+
+"session options
+set sessionoptions=curdir,buffers,tabpages
+
+"C-c and C-v - Copy/Paste with native clipbord
+vmap <C-C> "+yi
+imap <C-V> <esc>"+gPi
+
+
+"  Strip all trailing whitespace in file
+function! StripWhitespace ()
+    exec ':%s/ \+$//gc'
+endfunction
+map ,s :call StripWhitespace ()<CR>
+
+" % to bounce from do to end etc.
+runtime! macros/matchit.vim

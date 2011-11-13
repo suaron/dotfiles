@@ -1,0 +1,30 @@
+# .gitignore
+# Mac OS X Finder and whatnot
+.DS_Store
+ 
+# automatic backup files
+*~.nib
+*.swp
+*~
+*(Autosaved).rtfd/
+Backup[ ]of[ ]*.pages/
+Backup[ ]of[ ]*.key/
+Backup[ ]of[ ]*.numbers/" 
+
+#rails
+log/*.log
+tmp/**/*
+log/*.pid
+log/call_*
+db/schema.rb
+db/*.bkp
+db/*.sqlite3
+.DS_Store
+*.swp
+*~
+index/**/*
+config/database.yml
+config/s3.yml
+config/mail_servers.yml
+config/backup_fu.yml
+config/billing_on_rails.yml

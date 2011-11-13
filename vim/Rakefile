@@ -1,0 +1,108 @@
+require 'fileutils'
+require 'open-uri'
+
+git_bundles = [ 
+  "git://github.com/ddollar/nerdcommenter.git",
+  "git://github.com/ervandew/supertab.git",
+  "git://github.com/mattn/gist-vim.git",
+  "git://github.com/mileszs/ack.vim.git",
+  "git://github.com/michaeljsmith/vim-indent-object",
+  "git://github.com/taq/vim-rspec.git",
+  "git://github.com/tpope/vim-cucumber.git",
+  "git://github.com/tpope/vim-haml.git",
+  "git://github.com/tpope/vim-rails.git",
+  "git://github.com/tpope/vim-surround.git",
+  "git://github.com/vim-scripts/ZoomWin.git",
+  "git://github.com/wincent/Command-T.git",
+  "git://github.com/wycats/nerdtree.git",
+  "git://github.com/godlygeek/tabular.git",
+  "git://github.com/tpope/vim-fugitive.git",
+  "git://github.com/mattn/zencoding-vim.git",
+  "git://github.com/tpope/vim-markdown.git",
+  "git://github.com/robgleeson/hammer.vim.git"
+]
+
+desc "Remove 'backup swap autoload bundle vim-pathogen' folders"
+task :clean do
+  current_dir = File.dirname(__FILE__)
+  %w(backup swap autoload bundle vim-pathogen).each do |dir|
+    dir = File.join(current_dir, dir)
+    FileUtils.rm_rf(dir)
+  end
+end
+
+def prepare_install
+  current_dir = File.dirname(__FILE__)
+
+  %w(backup swap bundle).each do |dir|
+    dir = File.join(current_dir, dir)
+    FileUtils.mkdir(dir) unless File.directory?(dir)
+  end
+
+  plugin_dir = install_plugin( "git://github.com/tpope/vim-pathogen.git")
+
+  FileUtils.cd plugin_dir do
+    FileUtils.mv("autoload", "..")
+  end
+
+  FileUtils.rm_rf(plugin_dir)
+  current_dir
+end
+
+def install_plugin(url)
+  dir = url.split('/').last.sub(/\.git$/, '') 
+  `git clone #{url} #{dir}` 
+  return dir
+end
+
+desc "Make CommandT plugin"
+task :make_command_t do
+  command_t = File.join(File.dirname(__FILE__), "bundle", "Command-T", "ruby/command-t")
+  Dir.chdir command_t do
+    if `rvm > /dev/null 2>&1` && $?.exitstatus == 0
+      sh "rvm system ruby extconf.rb"
+    else
+      sh "/usr/bin/ruby extconf.rb" # assume /usr/bin/ruby is system ruby
+    end
+    sh "make clean && make"
+  end
+end
+
+desc "Install vim plugin"
+task :install do
+  current_dir = prepare_install
+  FileUtils.cd(File.join(current_dir, "bundle"))
+
+  puts "Remove everything inside bundle"
+  Dir["*"].each {|d| FileUtils.rm_rf d }
+
+  git_bundles.each do |url|
+    puts "  Installing #{url}"
+    dir = install_plugin url
+    FileUtils.rm_rf(File.join(dir, ".git"))
+  end
+end
+
+desc "Update the documentation"
+task :update_docs do
+  puts "Updating VIM Documentation..."
+  system "vim -e -s <<-EOF\n:helptags ~/.vim/doc\n:quit\nEOF"
+end
+
+task :clean do
+  system "git clean -dfx"
+end
+
+desc "Pull the latest"
+task :pull do
+  system "git pull"
+end
+
+desc "Clear out all build artifacts and rebuild the latest Janus"
+task :upgrade => [:clean, :pull, :default]
+
+task :default => [
+  :clean,
+  :install,
+  :make_command_t
+]

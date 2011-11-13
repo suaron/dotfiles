@@ -1,0 +1,5 @@
+#eval require 'ruby-debug/completion'
+set autolist 
+set listsize 25
+set autoeval
+set autoreload

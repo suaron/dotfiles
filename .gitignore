@@ -1,0 +1,6 @@
+vim/bundle
+vim/swap
+vim/autoload/pathogen.vim
+vim/ftdetect/markdown.vim
+vim/ftplugin/markdown.vim
+vim/syntax/markdown.vim

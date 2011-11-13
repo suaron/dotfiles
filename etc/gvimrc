@@ -1,0 +1,127 @@
+" Spellchek
+setlocal spell spelllang=
+setlocal nospell
+function ChangeSpellLang()
+  if &spelllang =~ "en_us"
+    setlocal spell spelllang=ru
+    echo "spelllang: ru"
+  elseif &spelllang =~ "ru"
+    setlocal spell spelllang=
+    setlocal nospell
+    echo "spelllang: off"
+  else
+    setlocal spell spelllang=en_us
+    echo "spelllang: en"
+  endif
+endfunc
+
+" Spellchek hotkey
+map <D-F11> :call ChangeSpellLang()<CR>
+
+" Start without the toolbar
+set guioptions-=T
+set guioptions-=L
+
+" set no scroll
+set guioptions-=r
+
+set showtabline=2
+
+if has("gui_macvim")
+  " Fullscreen mode takes the whole screen
+  set fuopt=maxvert,maxhorz
+
+  set guifont=Monaco:h16
+
+  " Antialias font
+  set anti
+
+  " Command-f for CommandT
+  macmenu &Edit.Find.Find\.\.\. key=<nop>
+  map <D-f> :CommandT<CR>
+
+  " Command-Shift-F for Ack
+  macmenu Window.Toggle\ Full\ Screen\ Mode key=<nop>
+  map <D-F> :Ack --ignore-dir=public <space>
+
+  "Command-/ to toggle comments
+  map <D-/> <plug>NERDCommenterToggle<CR>
+elseif has("gui_gtk2")
+  set guifont=Monaco
+end
+
+" Project Tree
+autocmd VimEnter * call s:CdIfDirectory(expand("<amatch>"))
+
+" If the parameter is a directory, cd into it
+function s:CdIfDirectory(directory)
+  let explicitDirectory = isdirectory(a:directory)
+  let directory = explicitDirectory || empty(a:directory)
+
+  if explicitDirectory
+    exe "cd " . a:directory
+  endif
+
+  if directory
+    NERDTree
+    wincmd p
+    bd
+  endif
+endfunction
+
+" Utility functions to create file commands
+function s:CommandCabbr(abbreviation, expansion)
+  execute 'cabbrev ' . a:abbreviation . ' <c-r>=getcmdpos() == 1 && getcmdtype() == ":" ? "' . a:expansion . '" : "' . a:abbreviation . '"<CR>'
+endfunction
+
+function s:FileCommand(name, ...)
+  if exists("a:1")
+    let funcname = a:1
+  else
+    let funcname = a:name
+  endif
+
+  execute 'command -nargs=1 -complete=file ' . a:name . ' :call ' . funcname . '(<f-args>)'
+endfunction
+
+function s:DefineCommand(name, destination)
+  call s:FileCommand(a:destination)
+  call s:CommandCabbr(a:name, a:destination)
+endfunction
+
+" Public NERDTree-aware versions of builtin functions
+function ChangeDirectory(dir, ...)
+  execute "cd " . a:dir
+  let stay = exists("a:1") ? a:1 : 1
+
+  NERDTree
+
+  if !stay
+    wincmd p
+  endif
+endfunction
+
+function Edit(file)
+  if exists("b:NERDTreeRoot")
+    wincmd p
+  endif
+
+  execute "e " . a:file
+
+ruby << RUBY
+  destination = File.expand_path(VIM.evaluate(%{system("dirname " . a:file)}))
+  pwd         = File.expand_path(Dir.pwd)
+  home        = pwd == File.expand_path("~")
+
+  if home || Regexp.new("^" + Regexp.escape(pwd)) !~ destination
+    VIM.command(%{call ChangeDirectory(system("dirname " . a:file), 0)})
+  end
+RUBY
+endfunction
+
+" Define the NERDTree-aware aliases
+call s:DefineCommand("cd", "ChangeDirectory")
+call s:DefineCommand("e", "Edit")
+
+" Strip whitespace at the end of lines
+command! StripWhitespace 1,$s/[ <tab>]*$//

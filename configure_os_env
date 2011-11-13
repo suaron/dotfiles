@@ -1,0 +1,4 @@
+defaults write org.vim.MacVim AppleShowAllFiles 1
+defaults write com.apple.finder QLEnableXRayFolders 1
+
+defaults write com.apple.Safari WebKitOmitPDFSupport -bool YES

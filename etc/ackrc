@@ -1,0 +1,12 @@
+--sort-files
+--color
+--context=1
+--follow
+--group
+--type-add=ruby=.haml,.feature,.ru,.rake
+--type-add=css=.sass,.scss
+--type-set=markdown=.markdown,.mdown,.md
+--type-set=plist=.plist
+--ignore-dir=log
+--ignore-dir=vendor/bundle
+--smart-case
