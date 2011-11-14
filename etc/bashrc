@@ -50,6 +50,8 @@ alias gemdep="gem dependency"
 
 alias be="bundle exec"
 
+alias gitx='open -a GitX'
+
 # Functions
 ff(){ 
   find . -name $@ -print 
