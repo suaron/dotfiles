@@ -125,3 +125,5 @@ call s:DefineCommand("e", "Edit")
 
 " Strip whitespace at the end of lines
 command! StripWhitespace 1,$s/[ <tab>]*$//
+
+map <leader>p :Hammer<CR>
