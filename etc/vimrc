@@ -177,3 +177,5 @@ map ,s :call StripWhitespace ()<CR>
 
 " % to bounce from do to end etc.
 runtime! macros/matchit.vim
+
+command! JSONFormat :execute ':%!python -m json.tool' | set filetype=javascript
