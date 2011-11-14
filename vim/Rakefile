@@ -19,7 +19,8 @@ git_bundles = [
   "git://github.com/tpope/vim-fugitive.git",
   "git://github.com/mattn/zencoding-vim.git",
   "git://github.com/tpope/vim-markdown.git",
-  "git://github.com/robgleeson/hammer.vim.git"
+  "git://github.com/robgleeson/hammer.vim.git",
+  "git://github.com/davidoc/taskpaper.vim.git"
 ]
 
 desc "Remove 'backup swap autoload bundle vim-pathogen' folders"
