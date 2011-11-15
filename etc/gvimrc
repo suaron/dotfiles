@@ -127,3 +127,8 @@ call s:DefineCommand("e", "Edit")
 command! StripWhitespace 1,$s/[ <tab>]*$//
 
 map <leader>p :Hammer<CR>
+
+" Local gvim config
+if filereadable(expand("~/.gvimrc.local"))
+  source ~/.gvimrc.local
+endif
