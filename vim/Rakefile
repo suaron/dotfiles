@@ -1,7 +1,7 @@
 require 'fileutils'
 require 'open-uri'
 
-git_bundles = [ 
+git_bundles = [
   "git://github.com/ddollar/nerdcommenter.git",
   "git://github.com/ervandew/supertab.git",
   "git://github.com/mattn/gist-vim.git",
@@ -51,8 +51,8 @@ def prepare_install
 end
 
 def install_plugin(url)
-  dir = url.split('/').last.sub(/\.git$/, '') 
-  `git clone #{url} #{dir}` 
+  dir = url.split('/').last.sub(/\.git$/, '')
+  `git clone #{url} #{dir}`
   return dir
 end
 
@@ -60,11 +60,7 @@ desc "Make CommandT plugin"
 task :make_command_t do
   command_t = File.join(File.dirname(__FILE__), "bundle", "Command-T", "ruby/command-t")
   Dir.chdir command_t do
-    if `rvm > /dev/null 2>&1` && $?.exitstatus == 0
-      sh "rvm system ruby extconf.rb"
-    else
-      sh "/usr/bin/ruby extconf.rb" # assume /usr/bin/ruby is system ruby
-    end
+    sh "/usr/bin/ruby extconf.rb" # assume /usr/bin/ruby is system ruby
     sh "make clean && make"
   end
 end
