@@ -81,7 +81,7 @@ set nofoldenable
 set listchars=tab:▸\ ,eol:¬
 
 "Status bar
-set statusline=%<%f%h%m%r\ %b\ %{fugitive#statusline()}%{&encoding}\ 0x\ \ %l,%c%V\ %P 
+set statusline=%<%f%h%m%r\ %b\ %{fugitive#statusline()}%{&encoding}\ 0x\ \ %l,%c%V\ %P
 set laststatus=2
 set sidescrolloff=2
 
@@ -148,6 +148,8 @@ au BufRead,BufNewFile *.sql        set ft=pgsql
 au BufRead,BufNewFile *.haml       set ft=haml
 au BufRead,BufNewFile *.{md,markdown,mdown,mkd,mkdn} call s:setupMarkup()
 
+au filetype css setlocal equalprg=csstidy\ -\ --silent=true
+
 au Filetype gitcommit set tw=80  spell
 au Filetype ruby      set ts=2
 
@@ -156,7 +158,7 @@ let g:HammerQuiet = 1
 
 "Disable bell
 set novisualbell
-set t_vb=   
+set t_vb=
 
 "Fix <Enter> for comment
 set fo+=cr
