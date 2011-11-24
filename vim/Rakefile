@@ -60,7 +60,7 @@ desc "Make CommandT plugin"
 task :make_command_t do
   command_t = File.join(File.dirname(__FILE__), "bundle", "Command-T", "ruby/command-t")
   Dir.chdir command_t do
-    sh "/usr/bin/ruby extconf.rb" # assume /usr/bin/ruby is system ruby
+    sh "ruby extconf.rb"
     sh "make clean && make"
   end
 end
