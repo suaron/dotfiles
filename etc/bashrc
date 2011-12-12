@@ -125,7 +125,9 @@ unslow_port() {
 }
 
 # node version manager
-source ~/.nvm/nvm.sh
+if [ -f ~/.nvm/nvm.sh ]; then
+  . ~/.nvm/nvm.sh
+fi
 
 export CC=gcc-4.2
 export CXX=g++-4.2
