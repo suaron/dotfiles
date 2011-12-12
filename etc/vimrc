@@ -186,3 +186,4 @@ command! JSONFormat :execute ':%!python -m json.tool' | set filetype=javascript
 " JS Beautify
 command! JSFormat :execute g:Jsbeautify()
 
+vmap ,x :!tidy -q -i -xml<CR>
