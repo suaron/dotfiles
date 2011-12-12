@@ -148,7 +148,7 @@ au BufRead,BufNewFile *.sql        set ft=pgsql
 au BufRead,BufNewFile *.haml       set ft=haml
 au BufRead,BufNewFile *.{md,markdown,mdown,mkd,mkdn} call s:setupMarkup()
 
-au filetype css setlocal equalprg=csstidy\ -\ --silent=true
+au filetype css setlocal equalprg="csstidy - --silent=true --template=highest"
 
 au Filetype gitcommit set tw=80  spell
 au Filetype ruby      set ts=2
@@ -185,5 +185,3 @@ command! JSONFormat :execute ':%!python -m json.tool' | set filetype=javascript
 
 " JS Beautify
 command! JSFormat :execute g:Jsbeautify()
-
-vmap ,x :!tidy -q -i -xml<CR>
