@@ -1,5 +1,8 @@
+set nocompatible
+
 call pathogen#infect()
-syntax on
+
+syntax enable
 
 "Load the plugin and indent settings for the detected filetype
 filetype plugin indent on
@@ -68,7 +71,7 @@ set wildignore+=*.o,*.obj,.git,*.rbc
 "Show line numbers
 set number
 
-"Status Line
+"Display incomplete commands
 set showcmd
 
 "Cursor highlights
@@ -178,7 +181,7 @@ endfunction
 map ,s :call StripWhitespace ()<CR>
 
 " % to bounce from do to end etc.
-runtime! macros/matchit.vim
+runtime macros/matchit.vim
 
 " JSON Beautify
 command! JSONFormat :execute ':%!python -m json.tool' | set filetype=javascript
