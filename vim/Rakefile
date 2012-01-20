@@ -56,7 +56,7 @@ end
 
 def install_plugin(url)
   dir = url.split('/').last.sub(/\.git$/, '')
-  `git clone #{url} #{dir}`
+  `git clone #{url} #{dir} --depth=1`
   return dir
 end
 
