@@ -1,0 +1,84 @@
+[user]
+# name = FULL_NAME
+# email = EMAIL
+
+[github]
+# These details can be found at <https://github.com/account>
+# user = USERNAME
+# token = TOKEN
+
+[diff]
+  color = auto
+  rename = copy
+  tool = diffmerge
+
+[pager]
+  color = true
+
+# this one is very cool:
+# green means "to be committed"
+# red means "not to be committed"
+[status]
+  color = auto
+
+[alias]
+  co = checkout
+  ci = commit
+  st = status
+  br = branch
+  hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+  type = cat-file -t
+  dump = cat-file -p
+  lg = log --graph --pretty=format:'%Cred%h%Creset%C(yellow)%d%Creset %s %C(black bold)- %an %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
+  standup = shortlog --pretty=format:'%Cred%h%Creset %s %Cgreen(%cr)%Creset' --since='2 days ago' --all
+
+[core]
+  filemode = true
+  logallrefupdates = true
+  whitespace=fix, -indent-with-non-tab, trailing-space, cr-at-eol
+  autocrlf = false
+  safecrlf = true
+
+[color]
+  ui = auto
+
+[color "diff"]
+  meta = blue bold
+  frag = magenta bold
+  old = red bold
+  new = green bold
+
+[color "branch"]
+  current = yellow reverse
+  local = yellow bold
+  remote = green bold
+  plain = red bold
+
+[color "status"]
+  added = yellow
+  changed = green bold
+  untracked = blue bold
+
+[difftool "diffmerge"]
+  cmd = diffmerge \"$LOCAL\" \"$REMOTE\"
+
+[merge]
+  tool = diffmerge
+
+[mergetool "diffmerge"]
+  cmd = diffmerge --merge --result=\"$MERGED\"\n\"$LOCAL\" \"$BASE\" \"$REMOTE\"
+  trustexitcode = false
+
+[difftool "sourcetree"]
+  cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+  path =
+
+[mergetool "sourcetree"]
+  cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+  trustExitCode = true
+
+[browser "safari"]
+  cmd = open -a Safari.app
+
+[web]
+  browser = safari
