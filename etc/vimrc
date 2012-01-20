@@ -1,4 +1,5 @@
 call pathogen#infect()
+call pathogen#helptags()
 syntax on
 
 "Load the plugin and indent settings for the detected filetype
