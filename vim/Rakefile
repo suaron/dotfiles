@@ -23,7 +23,7 @@ git_bundles = [
   "git://github.com/tpope/vim-rails.git",
   "git://github.com/tpope/vim-surround.git",
   "git://github.com/vim-scripts/ZoomWin.git",
-  "git://github.com/wincent/Command-T.git",
+  "git://github.com/kien/ctrlp.vim.git",
   "git://github.com/wycats/nerdtree.git"
 ]
 
@@ -58,15 +58,6 @@ def install_plugin(url)
   dir = url.split('/').last.sub(/\.git$/, '')
   `git clone #{url} #{dir}`
   return dir
-end
-
-desc "Make CommandT plugin"
-task :make_command_t do
-  command_t = File.join(File.dirname(__FILE__), "bundle", "Command-T", "ruby/command-t")
-  Dir.chdir command_t do
-    sh "ruby extconf.rb"
-    sh "make clean && make"
-  end
 end
 
 desc "Install vim plugin"
@@ -105,5 +96,5 @@ task :upgrade => [:clean, :pull, :default]
 task :default => [
   :clean,
   :install,
-  :make_command_t
+  :update_docs
 ]
