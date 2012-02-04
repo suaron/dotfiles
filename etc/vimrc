@@ -17,11 +17,9 @@ map <Leader>h :nohlsearch<CR>
 "Write with sudo with w!!
 cmap w!! w !sudo tee % >/dev/null
 
-"Show CtrlP search panel
-map <Leader>f :CtrlP<CR>
-
-let g:ctrlp_match_window_reversed = 0
-let g:ctrlp_max_height = 20
+"Show CommandT search panel
+map <Leader>f :CommandT<CR>
+let g:CommandTMaxHeight=20
 
 map <Leader>n :NERDTreeToggle<CR>
 

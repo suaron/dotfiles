@@ -38,7 +38,7 @@ if has("gui_macvim")
 
   " Command-f for CommandT
   macmenu &Edit.Find.Find\.\.\. key=<nop>
-  map <D-f> :CtrlP<CR>
+  map <D-f> :CommandT<CR>
 
   " Command-Shift-F for Ack
   macmenu Window.Toggle\ Full\ Screen\ Mode key=<nop>
