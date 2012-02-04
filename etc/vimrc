@@ -189,4 +189,11 @@ command! JSONFormat :execute ':%!python -m json.tool' | set filetype=javascript
 
 " JS Beautify
 command! JSFormat :execute g:Jsbeautify()
+
+
+function! Tasks ()
+    exec ':e ~/Desktop/To-do.taskpaper'
+endfunction
+command! Tasks :execute Tasks()
+
 let g:browser = 'open -a /Applications/Safari.app'
