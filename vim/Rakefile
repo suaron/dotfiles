@@ -24,7 +24,8 @@ git_bundles = [
   "git://github.com/tpope/vim-surround.git",
   "git://github.com/vim-scripts/ZoomWin.git",
   "git://github.com/wincent/Command-T.git",
-  "git://github.com/wycats/nerdtree.git"
+  "git://github.com/wycats/nerdtree.git",
+  "git://github.com/t9md/vim-chef.git"
 ]
 
 desc "Remove 'backup swap autoload bundle vim-pathogen' folders"
