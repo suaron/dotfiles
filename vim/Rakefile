@@ -58,6 +58,7 @@ end
 def install_plugin(url)
   dir = url.split('/').last.sub(/\.git$/, '')
   `git clone #{url} #{dir} --depth=1`
+  throw "Something wrong with git repository" unless $?.to_i == 0
   return dir
 end
 
