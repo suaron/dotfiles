@@ -67,7 +67,16 @@ set wildmenu
 
 "Tab completion
 set wildmode=list:longest,list:full
-set wildignore+=*.o,*.obj,.git,*.rbc
+set wildignore+=*.o,*.out,*.obj,.git,*.rbc,*.rbo,*.class,.svn,*.gem
+
+"Disable archive
+set wildignore+=*.zip,*.tar.gz,*.tar.bz2,*.rar,*.tar.xz
+
+"Ignore bundler and sass
+set wildignore+=*/vendor/gems/*,*/vendor/cache/*,*/.bundle/*,*/.sass-cache/*
+
+"Disable temp and backup
+set wildignore+=*.swp,*~,._*
 
 "Show line numbers
 set number
@@ -133,32 +142,27 @@ if has("autocmd")
     \| exe "normal g'\"" | endif
 endif
 
-function s:setupWrapping()
+" Some file types should wrap their text
+function! s:setupWrapping()
   set wrap
-  set wrapmargin=2
+  set linebreak
   set textwidth=72
+  set nolist
 endfunction
 
-function s:setupMarkup()
-  call s:setupWrapping()
-  map <buffer> <Leader>p :Hammer<CR>
-endfunction
-
-au BufRead,BufNewFile {Gemfile,Rakefile,Thorfile,config.ru} set ft=ruby
+au BufRead,BufNewFile {Gemfile,Rakefile,Vagrantfile,Thorfile,Procfile,config.ru,*.rake,*.ru,*.god,*.rabl} set ft=ruby
 au BufRead,BufNewFile {.localrc,localrc} set ft=sh
-au BufRead,BufNewFile *.ru         set ft=ruby
-au BufRead,BufNewFile *.god        set ft=ruby
-au BufRead,BufNewFile *.sql        set ft=pgsql
-au BufRead,BufNewFile *.haml       set ft=haml
-au BufRead,BufNewFile *.{md,markdown,mdown,mkd,mkdn} call s:setupMarkup()
-
+au BufRead,BufNewFile *.sql set ft=pgsql
+au BufRead,BufNewFile *.haml set ft=haml
+au BufNewFile,BufRead *.json set ft=javascript
+" Make sure all mardown files have the correct filetype set and setup wrapping
+au BufRead,BufNewFile *.{md,markdown,mdown,mkd,mkdn,txt} setf markdown | call s:setupWrapping()
 au filetype css setlocal equalprg="csstidy - --silent=true --template=highest"
 
-au Filetype gitcommit set tw=80  spell
+au Filetype gitcommit set tw=80 spell
 au Filetype ruby      set ts=2
 
 set splitbelow splitright
-let g:HammerQuiet = 1
 
 "Disable bell
 set novisualbell
@@ -173,7 +177,6 @@ set sessionoptions=curdir,buffers,tabpages
 "C-c and C-v - Copy/Paste with native clipbord
 vmap <C-C> "+yi
 imap <C-V> <esc>"+gPi
-
 
 "  Strip all trailing whitespace in file
 function! StripWhitespace ()
