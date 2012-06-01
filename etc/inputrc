@@ -29,6 +29,9 @@ set convert-meta off
 
 set show-all-if-ambiguous on
 
+# ignore case
+set completion-ignore-case on
+
 $if Bash
   # F10 toggles mc on and off
   # Note Ctrl-o toggles panes on and off in mc
