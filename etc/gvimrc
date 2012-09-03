@@ -34,7 +34,7 @@ if has("gui_macvim")
   set guifont=Monaco:h16
 
   " Antialias font
-  set anti
+  set antialias
 
   " Command-f for CommandT
   macmenu &Edit.Find.Find\.\.\. key=<nop>
@@ -49,86 +49,3 @@ if has("gui_macvim")
 elseif has("gui_gtk2")
   set guifont=Monaco
 end
-
-" Project Tree
-autocmd VimEnter * call s:CdIfDirectory(expand("<amatch>"))
-
-" If the parameter is a directory, cd into it
-function s:CdIfDirectory(directory)
-  let explicitDirectory = isdirectory(a:directory)
-  let directory = explicitDirectory || empty(a:directory)
-
-  if explicitDirectory
-    exe "cd " . a:directory
-  endif
-
-  if directory
-    NERDTree
-    wincmd p
-    bd
-  endif
-endfunction
-
-" Utility functions to create file commands
-function s:CommandCabbr(abbreviation, expansion)
-  execute 'cabbrev ' . a:abbreviation . ' <c-r>=getcmdpos() == 1 && getcmdtype() == ":" ? "' . a:expansion . '" : "' . a:abbreviation . '"<CR>'
-endfunction
-
-function s:FileCommand(name, ...)
-  if exists("a:1")
-    let funcname = a:1
-  else
-    let funcname = a:name
-  endif
-
-  execute 'command -nargs=1 -complete=file ' . a:name . ' :call ' . funcname . '(<f-args>)'
-endfunction
-
-function s:DefineCommand(name, destination)
-  call s:FileCommand(a:destination)
-  call s:CommandCabbr(a:name, a:destination)
-endfunction
-
-" Public NERDTree-aware versions of builtin functions
-function ChangeDirectory(dir, ...)
-  execute "cd " . a:dir
-  let stay = exists("a:1") ? a:1 : 1
-
-  NERDTree
-
-  if !stay
-    wincmd p
-  endif
-endfunction
-
-function Edit(file)
-  if exists("b:NERDTreeRoot")
-    wincmd p
-  endif
-
-  execute "e " . a:file
-
-ruby << RUBY
-  destination = File.expand_path(VIM.evaluate(%{system("dirname " . a:file)}))
-  pwd         = File.expand_path(Dir.pwd)
-  home        = pwd == File.expand_path("~")
-
-  if home || Regexp.new("^" + Regexp.escape(pwd)) !~ destination
-    VIM.command(%{call ChangeDirectory(system("dirname " . a:file), 0)})
-  end
-RUBY
-endfunction
-
-" Define the NERDTree-aware aliases
-call s:DefineCommand("cd", "ChangeDirectory")
-call s:DefineCommand("e", "Edit")
-
-" Strip whitespace at the end of lines
-command! StripWhitespace 1,$s/[ <tab>]*$//
-
-map <leader>p :Hammer<CR>
-
-" Local gvim config
-if filereadable(expand("~/.gvimrc.local"))
-  source ~/.gvimrc.local
-endif

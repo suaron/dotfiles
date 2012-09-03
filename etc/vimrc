@@ -1,94 +1,34 @@
 set nocompatible
+syntax enable
 
 call pathogen#infect()
 call pathogen#helptags()
 
-syntax on
-
-"Load the plugin and indent settings for the detected filetype
-filetype plugin indent on
-
-"Set Leader
-let mapleader = ","
-
-"Hide last search highlighting
-map <Leader>h :nohlsearch<CR>
-
-"Write with sudo with w!!
-cmap w!! w !sudo tee % >/dev/null
-
-"Show CommandT search panel
-map <Leader>f :CommandT<CR>
-let g:CommandTMaxHeight=20
-
-map <Leader>n :NERDTreeToggle<CR>
-
-"Show current file in NERDTree
-map <leader>r :NERDTreeFind<cr>
-
-"ZoomWin configuration
-map <Leader>z :ZoomWin<CR>
-
-"Ctrl-e expand Zend Coding
-let g:user_zen_expandabbr_key = '<c-e>'
+filetype plugin indent on                   " Load the plugin and indent settings for the detected filetype
 
 set history=1000
-
-"List auto detected file encoding
-set fileencodings=utf-8,cp1251,koi8-r,cp866
-
-"Default encoding
-set encoding=utf-8
-set termencoding=utf-8
-
+set fileencodings=utf-8,cp1251,koi8-r,cp866 " List auto detected file encoding
+set encoding=utf-8                          " Default encoding
 set showmode
 
-set t_Co=256
-if (&t_Co == 256) && !has('gui_running')
-  colorscheme vibrantink
-else
-  colorscheme railscasts+
-endif
-
-"Keep swp files under ~/.vim/swap
-set directory=~/.vim/swap
-
-"Turn off lazy redraw
-set nolazyredraw
-
-"Show ruler
-set ruler
-
-"Switch betwin buffers without savingl
-set hidden
-
-"Turn on wild menu
-set wildmenu
+colorscheme railscasts+
+set directory=~/.vim/swap " Keep swp files under ~/.vim/swap
 
 "Tab completion
 set wildmode=list:longest,list:full
 set wildignore+=*.o,*.out,*.obj,.git,*.rbc,*.rbo,*.class,.svn,*.gem
-
-"Disable archive
 set wildignore+=*.zip,*.tar.gz,*.tar.bz2,*.rar,*.tar.xz
-
-"Ignore bundler and sass
 set wildignore+=*/vendor/gems/*,*/vendor/cache/*,*/.bundle/*,*/.sass-cache/*
-
-"Disable temp and backup
 set wildignore+=*.swp,*~,._*
 
-"Show line numbers
-set number
-
-"Display incomplete commands
-set showcmd
-
-"Cursor highlights
-set cursorline
-
-"Turn off folding
-set nofoldenable
+set nolazyredraw " Turn off lazy redraw
+set ruler        " Show ruler
+set hidden       " Switch betwin buffers without savingl
+set wildmenu     " Turn on wild menu
+set number       " Show line numbers
+set showcmd      " Display incomplete commands
+set cursorline   " Cursor highlights
+set nofoldenable " Turn off folding
 
 "Invisible characters
 set listchars=tab:▸\ ,eol:¬
@@ -98,29 +38,15 @@ set statusline=%<%f%h%m%r\ %b\ %{fugitive#statusline()}%{&encoding}\ 0x\ \ %l,%c
 set laststatus=2
 set sidescrolloff=2
 
-"Use mouse everywhere
-set mouse=a
+set mouse=a "Use mouse everywhere
 
-"Highlight search
-set hlsearch
-
-"Incremental search, search as you type
-set incsearch
-
-"Ignore case when searching
-set ignorecase
-
-"Ignore case when searching lowercase
-set smartcase
-
-"Automatic indent new lines
-set autoindent
-
-"Be smart about it
-set smartindent
-
-"Do not wrap lines
-set nowrap
+set hlsearch    " Highlight search
+set incsearch   " Incremental search, search as you type
+set ignorecase  " Ignore case when searching
+set smartcase   " Ignore case when searching lowercase
+set autoindent  " Automatic indent new lines
+set smartindent " Be smart about it
+set nowrap      " Do not wrap lines
 
 set softtabstop=2
 set shiftwidth=2
@@ -146,7 +72,7 @@ endif
 function! s:setupWrapping()
   set wrap
   set linebreak
-  set textwidth=72
+  set textwidth=80
   set nolist
 endfunction
 
@@ -171,32 +97,35 @@ set t_vb=
 "Fix <Enter> for comment
 set fo+=cr
 
-"session options
-set sessionoptions=curdir,buffers,tabpages
+set sessionoptions=curdir,buffers,tabpages "session options
+
+let mapleader = "," "Set Leader
+
+"Hide last search highlighting
+map <Leader>h :nohlsearch<cr>
+
+"Write with sudo with w!!
+cmap w!! w !sudo tee % >/dev/null
+
+"Show CommandT search panel
+map <Leader>f :CommandT<CR>
+let g:CommandTMaxHeight=20
+
+map <Leader>n :NERDTreeToggle<CR>
+
+"Show current file in NERDTree
+map <leader>r :NERDTreeFind<CR>
+
+"ZoomWin configuration
+map <Leader>z :ZoomWin<CR>
+map <leader>p :Hammer<CR>
 
 "C-c and C-v - Copy/Paste with native clipbord
 vmap <C-C> "+yi
 imap <C-V> <esc>"+gPi
 
-"  Strip all trailing whitespace in file
-function! StripWhitespace ()
-    exec ':%s/ \+$//gc'
-endfunction
-map ,s :call StripWhitespace ()<CR>
-
-" % to bounce from do to end etc.
-runtime macros/matchit.vim
+" Strip whitespace at the end of lines
+command! StripWhitespace 1,$s/[ <tab>]*$//
 
 " JSON Beautify
 command! JSONFormat :execute ':%!python -m json.tool' | set filetype=javascript
-
-" JS Beautify
-command! JSFormat :execute g:Jsbeautify()
-
-
-function! Tasks ()
-    exec ':e ~/Desktop/To-do.taskpaper'
-endfunction
-command! Tasks :execute Tasks()
-
-let g:browser = 'open -a /Applications/Safari.app'
