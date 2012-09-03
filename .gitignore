@@ -1,6 +1,3 @@
-vim/bundle
 vim/swap
+vim/.netrwhist
 vim/autoload/pathogen.vim
-vim/ftdetect/markdown.vim
-vim/ftplugin/markdown.vim
-vim/syntax/markdown.vim
