@@ -89,3 +89,5 @@
 [help]
   browser = gitscm
 
+[include]
+  path = ~/.gitconfig.local
