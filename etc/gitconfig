@@ -82,7 +82,10 @@
 
 [web]
   browser = safari
+
 [browser "gitscm"]
-	cmd = /bin/sh -c 'open http://git-scm.com/docs/$(basename $1 .html)' --
+  cmd = /bin/sh -c 'open http://git-scm.com/docs/$(basename $1 .html)' --
+
 [help]
-	browser = gitscm
+  browser = gitscm
+
