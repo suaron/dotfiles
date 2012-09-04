@@ -124,6 +124,9 @@ map <leader>p :Hammer<CR>
 vmap <C-C> "+yi
 imap <C-V> <esc>"+gPi
 
+"use bundler with Rspec for vim-rspec plugin
+let g:RspecBin = "bundle exec rspec"
+
 " Strip trailing whitespace (,ss)
 function! StripWhitespace()
   let save_cursor = getpos(".")
