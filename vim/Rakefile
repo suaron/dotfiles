@@ -12,7 +12,7 @@ task :install do
 end
 
 desc "Upgrade bundles from its upstream"
-task :upgrade_submodule do
+task :upgrade do
   system "cd .. && git submodule foreach ' git pull --quiet --ff-only --no-rebase origin master '"
 end
 
