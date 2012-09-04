@@ -7,6 +7,7 @@
 --type-add=css=.sass,.scss
 --type-set=markdown=.markdown,.mdown,.md
 --type-set=plist=.plist
---ignore-dir=log
 --ignore-dir=vendor/bundle
 --smart-case
+--type-set=LOG=.log
+--noLOG
