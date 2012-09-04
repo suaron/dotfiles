@@ -49,3 +49,7 @@ if has("gui_macvim")
 elseif has("gui_gtk2")
   set guifont=Monaco
 end
+
+if filereadable("~/.gvimrc.local")
+    so ~/.gvimrc.local
+endif
