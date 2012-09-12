@@ -44,8 +44,6 @@ alias gemdep="gem dependency"
 
 alias be="bundle exec"
 
-alias gitx='open -a GitX'
-
 alias psg="ps aux | egrep -i --color"
 
 # Empty the Trash on all mounted volumes and the main HDD
