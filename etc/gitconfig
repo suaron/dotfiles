@@ -21,6 +21,9 @@
 [status]
   color = auto
 
+[gc]
+  auto=1
+
 [alias]
   co = checkout
   ci = commit
@@ -33,6 +36,8 @@
   dump = cat-file -p
   lg = log --graph --pretty=format:'%Cred%h%Creset%C(yellow)%d%Creset %s %C(black bold)- %an %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
   standup = shortlog --pretty=format:'%Cred%h%Creset %s %Cgreen(%cr)%Creset' --since='2 days ago' --all
+  unstage = reset HEAD
+  uncommit = reset --soft HEAD^
 
 [core]
   filemode = true
@@ -66,6 +71,7 @@
 
 [merge]
   tool = diffmerge
+  summary=true
 
 [mergetool "diffmerge"]
   cmd = diffmerge --merge --result=\"$MERGED\"\n\"$LOCAL\" \"$BASE\" \"$REMOTE\"
