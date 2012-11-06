@@ -109,7 +109,7 @@ cmap w!! w !sudo tee % >/dev/null
 
 "Show CommandT search panel
 map <Leader>f :CommandT<CR>
-let g:CommandTMaxHeight=20
+let g:CommandTMaxHeight=30
 
 map <Leader>n :NERDTreeToggle<CR>
 
