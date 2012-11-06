@@ -61,3 +61,6 @@
 [submodule "vim/bundle/html5.vim"]
 	path = vim/bundle/html5.vim
 	url = git://github.com/othree/html5.vim.git
+[submodule "vim/bundle/LustyExplorer"]
+	path = vim/bundle/LustyExplorer
+	url = git://github.com/vim-scripts/LustyExplorer.git
