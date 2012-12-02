@@ -64,9 +64,9 @@ fi
 # <new line><user>:<current_directory> git_branch <new line> <prompt>
 export PS1="\n\u:\w \[\e[1;32m\]\$(__git_ps1 '%s')\[\e[0m\] \n→ "
 
-#rbenv
-export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init -)"
+#chruby
+. /usr/local/opt/chruby/share/chruby/chruby.sh
+RUBIES=(~/.chruby/*)
 
 # node version manager
 if [ -f ~/.nvm/nvm.sh ]; then
