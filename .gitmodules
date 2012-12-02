@@ -64,3 +64,9 @@
 [submodule "vim/bundle/LustyExplorer"]
 	path = vim/bundle/LustyExplorer
 	url = git://github.com/vim-scripts/LustyExplorer.git
+[submodule "vim/bundle/vim-bundler"]
+	path = vim/bundle/vim-bundler
+	url = git://github.com/tpope/vim-bundler.git
+[submodule "vim/bundle/vim-rake"]
+	path = vim/bundle/vim-rake
+	url = git://github.com/tpope/vim-rake.git
