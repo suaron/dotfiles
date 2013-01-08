@@ -1,4 +1,4 @@
-My Compilitions Dotfiles
+My Compilations Dotfiles
 ========================
 
 Clone repository
