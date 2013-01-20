@@ -12,7 +12,11 @@ set encoding=utf-8                          " Default encoding
 set showmode
 
 colorscheme railscasts+
-set directory=~/.vim/swap " Keep swp files under ~/.vim/swap
+
+" Turn backup off
+set nobackup
+set nowb
+set noswapfile
 
 "Tab completion
 set wildmode=list:longest,list:full
