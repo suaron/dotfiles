@@ -81,11 +81,11 @@ ff(){
 # push SSH public key
 push_ssh_cert() {
   local _host
-  test -f ~/.ssh/id_dsa.pub || ssh-keygen -t dsa
+  test -f ~/.ssh/id_rsa.pub || ssh-keygen -t dsa
   for _host in "$@";
   do
     echo $_host
-    ssh $_host 'cat >> ~/.ssh/authorized_keys' < ~/.ssh/id_dsa.pub
+    ssh $_host 'cat >> ~/.ssh/authorized_keys' < ~/.ssh/id_rsa.pub
   done
 }
 
