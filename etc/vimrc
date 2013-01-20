@@ -120,10 +120,6 @@ map <Leader>n :NERDTreeToggle<CR>
 "Show current file in NERDTree
 map <leader>r :NERDTreeFind<CR>
 
-"ZoomWin configuration
-map <Leader>z :ZoomWin<CR>
-map <leader>p :Hammer<CR>
-
 "C-c and C-v - Copy/Paste with native clipbord
 vmap <C-C> "+yi
 imap <C-V> <esc>"+gPi
