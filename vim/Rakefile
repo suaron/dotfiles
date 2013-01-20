@@ -1,6 +1,6 @@
-desc "Remove 'backup swap autoload vim-pathogen' folders"
+desc "Remove 'backup autoload vim-pathogen' folders"
 task :clean do
-  dirs = %w(backup swap autoload vim-pathogen).map{|dir| File.expand_path dir}
+  dirs = %w(backup autoload vim-pathogen).map{|dir| File.expand_path dir}
   FileUtils.rm_rf(dirs)
 end
 
@@ -17,7 +17,7 @@ task :upgrade do
 end
 
 def prepare_install
-  dirs = %w(backup swap).map{|dir| File.expand_path dir}
+  dirs = %w(backup).map{|dir| File.expand_path dir}
   FileUtils.mkdir_p(dirs)
 
   #install vim-pathogen.git
