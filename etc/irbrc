@@ -50,3 +50,8 @@ if require_ruby_gem("wirble")
   # Enable colored output
   Wirble.colorize
 end
+
+if require_ruby_gem("pry")
+  Pry.start
+  exit
+end
