@@ -134,7 +134,5 @@ function! StripWhitespace()
 endfunction
 noremap <leader>ss :call StripWhitespace()<CR>
 
-let g:ackprg = 'ag --nogroup --nocolor --column'
-
 " JSON Beautify
 command! JSONFormat :execute ':%!python -m json.tool' | set filetype=javascript
