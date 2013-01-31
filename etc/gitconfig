@@ -38,6 +38,7 @@
   standup = shortlog --pretty=format:'%Cred%h%Creset %s %Cgreen(%cr)%Creset' --since='2 days ago' --all
   unstage = reset HEAD
   uncommit = reset --soft HEAD^
+  edit-conflicts = "!f() { git status -s | grep ^UU | awk '{print $2}' ; }; mvim `f`"
 
 [core]
   filemode = true
@@ -70,7 +71,7 @@
   cmd = diffmerge \"$LOCAL\" \"$REMOTE\"
 
 [merge]
-  tool = diffmerge
+  tool = fugitive
   summary=true
 
 [mergetool "diffmerge"]
@@ -99,3 +100,6 @@
 
 [include]
   path = ~/.gitconfig.local
+
+[mergetool "fugitive"]
+  cmd = mvim -f -c \"Gdiff\" \"$MERGED\"
