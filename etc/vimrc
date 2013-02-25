@@ -134,5 +134,39 @@ function! StripWhitespace()
 endfunction
 noremap <leader>ss :call StripWhitespace()<CR>
 
+" You don't know what you're missing if you don't use this.
+nmap <C-e> :e#<CR>
+
+" Move between open buffers.
+map <C-n> :bnext<CR>
+map <C-p> :bprev<CR>
+
+" Let's try buffkill-vim using my favorite Emacs binding...
+nmap <Esc>k :BD<CR>
+nmap <M-k> :BD<CR>
+nmap <D-k> :BD<CR>
+
 " JSON Beautify
 command! JSONFormat :execute ':%!python -m json.tool' | set filetype=javascript
+
+" Rename.vim  -  Rename a buffer within Vim and on the disk
+" Copyright June 2007 by Christian J. Robinson <infynity@onewest.net>
+" Distributed under the terms of the Vim license.  See ":help license".
+" http://www.infynity.spodzone.com/vim/Rename.vim
+" Usage: :Rename[!] {newname}
+command! -nargs=* -complete=file -bang Rename :call Rename("<args>", "<bang>")
+function! Rename(name, bang)
+    let l:curfile = expand("%:p")
+    let v:errmsg = ""
+    silent! exe "saveas" . a:bang . " " . a:name
+    if v:errmsg =~# '^$\|^E329'
+        if expand("%:p") !=# l:curfile && filewritable(expand("%:p"))
+            silent exe "bwipe! " . l:curfile
+            if delete(l:curfile)
+                echoerr "Could not delete " . l:curfile
+            endif
+        endif
+    else
+        echoerr v:errmsg
+    endif
+endfunction
