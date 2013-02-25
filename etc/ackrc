@@ -2,12 +2,16 @@
 --color
 --follow
 --group
+--all
 --type-add=ruby=.haml,.feature,.ru,.rake
 --type-add=html=.erb,.haml
 --type-add=css=.sass,.scss
 --type-set=markdown=.markdown,.mdown,.md
 --type-set=plist=.plist
 --ignore-dir=vendor/bundle
+--ignore-dir=log
+--ignore-dir=tmp
 --smart-case
 --type-set=LOG=.log
 --noLOG
+
