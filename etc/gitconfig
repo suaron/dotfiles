@@ -103,3 +103,6 @@
 
 [mergetool "fugitive"]
   cmd = mvim -f -c \"Gdiff\" \"$MERGED\"
+
+[pull]
+  rebase = true
