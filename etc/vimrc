@@ -11,7 +11,9 @@ set fileencodings=utf-8,cp1251,koi8-r,cp866 " List auto detected file encoding
 set encoding=utf-8                          " Default encoding
 set showmode
 
-colorscheme railscasts+
+"colorscheme railscasts+
+set background=dark
+colorscheme solarized
 
 " Turn backup off
 set nobackup
