@@ -2,7 +2,6 @@
 --color
 --follow
 --group
---all
 --type-add=ruby=.haml,.feature,.ru,.rake
 --type-add=html=.erb,.haml
 --type-add=css=.sass,.scss
@@ -14,4 +13,4 @@
 --smart-case
 --type-set=LOG=.log
 --noLOG
-
+--ignore-file=is:tags
