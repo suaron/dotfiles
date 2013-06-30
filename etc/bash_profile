@@ -66,6 +66,7 @@ export PS1="\n\u:\w \[\e[1;32m\]\$(__git_ps1 '%s')\[\e[0m\] \n→ "
 
 #chruby
 . /usr/local/opt/chruby/share/chruby/chruby.sh
+. /usr/local/opt/chruby/share/chruby/auto.sh
 RUBIES=(~/.rubies/*)
 
 # node version manager
