@@ -19,6 +19,8 @@ export HISTFILESIZE=3000
 export HISTIGNORE="ls:cd:[bf]g:exit:..:...:ll:lla"
 shopt -s histappend # Append to the Bash history file, rather than overwriting it
 
+alias server='ruby -run -e httpd -- -p 5000 .'
+
 # autofix typos
 shopt -s cdspell
 
