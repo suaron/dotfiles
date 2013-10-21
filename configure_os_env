@@ -78,10 +78,10 @@ defaults write NSGlobalDomain NSDisableAutomaticTermination -bool true
 sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo HostName
 
 # Restart automatically if the computer freezes
-systemsetup -setrestartfreeze on
+# systemsetup -setrestartfreeze on
 
 # Never go into computer sleep mode
-systemsetup -setcomputersleep Off > /dev/null
+# systemsetup -setcomputersleep Off > /dev/null
 
 ###############################################################################
 # Trackpad, mouse, keyboard, Bluetooth accessories, and input                 #
@@ -162,7 +162,7 @@ defaults write com.apple.screensaver askForPasswordDelay -int 0
 # defaults write com.apple.screencapture location -string "$HOME/Desktop"
 
 # Save screenshots in PNG format (other options: BMP, GIF, JPG, PDF, TIFF)
-# defaults write com.apple.screencapture type -string "png"
+defaults write com.apple.screencapture type -string "png"
 
 # Disable shadow in screenshots
 defaults write com.apple.screencapture disable-shadow -bool true
@@ -193,7 +193,7 @@ defaults write com.apple.finder DisableAllAnimations -bool true
 # defaults write com.apple.Finder AppleShowAllFiles -bool true
 
 # Finder: show all filename extensions
-# defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 
 # Finder: show status bar
 defaults write com.apple.finder ShowStatusBar -bool true
@@ -290,7 +290,7 @@ defaults write com.apple.dock expose-animation-duration -float 0.1
 # (i.e. use the old Exposé behavior instead)
 # defaults write com.apple.dock expose-group-by-app -bool false
 
-# Don’t show Dashboard as a Space
+# Show Dashboard as a Space
 defaults write com.apple.dock dashboard-in-overlay -bool true
 
 # Remove the auto-hiding Dock delay
@@ -302,7 +302,7 @@ defaults write com.apple.dock autohide-time-modifier -float 0
 #defaults write com.apple.dock no-glass -bool true
 
 # Automatically hide and show the Dock
-defaults write com.apple.dock autohide -bool true
+# defaults write com.apple.dock autohide -bool true
 
 # Make Dock icons of hidden applications translucent
 # defaults write com.apple.dock showhidden -bool true
@@ -370,16 +370,16 @@ defaults write com.apple.Safari WebKitOmitPDFSupport -bool YES
 ###############################################################################
 
 # Disable the iTunes store link arrows
-defaults write com.apple.iTunes show-store-link-arrows -bool false
+# defaults write com.apple.iTunes show-store-link-arrows -bool false
 
 # Disable the Genius sidebar in iTunes
-defaults write com.apple.iTunes disableGeniusSidebar -bool true
+# defaults write com.apple.iTunes disableGeniusSidebar -bool true
 
 # Disable the Ping sidebar in iTunes
-defaults write com.apple.iTunes disablePingSidebar -bool true
+# defaults write com.apple.iTunes disablePingSidebar -bool true
 
 # Disable all the other Ping stuff in iTunes
-defaults write com.apple.iTunes disablePing -bool true
+# defaults write com.apple.iTunes disablePing -bool true
 
 # Disable radio stations in iTunes
 # defaults write com.apple.iTunes disableRadio -bool true
@@ -388,7 +388,7 @@ defaults write com.apple.iTunes disablePing -bool true
 # To use these commands in another language, browse iTunes’s package contents,
 # open `Contents/Resources/your-language.lproj/Localizable.strings`, and look
 # for `kHiddenMenuItemTargetSearch`.
-defaults write com.apple.iTunes NSUserKeyEquivalents -dict-add "Target Search Field" "@F"
+# defaults write com.apple.iTunes NSUserKeyEquivalents -dict-add "Target Search Field" "@F"
 
 ###############################################################################
 # Mail                                                                        #
@@ -477,7 +477,7 @@ defaults write com.apple.DiskUtility advanced-image-options -bool true
 ###############################################################################
 # MacVim.app                                                                  #
 ###############################################################################
-defaults write org.vim.MacVim AppleShowAllFiles 1
+# defaults write org.vim.MacVim AppleShowAllFiles 1
 
 ###############################################################################
 # Kill affected applications                                                  #
