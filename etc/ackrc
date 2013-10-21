@@ -5,6 +5,7 @@
 --type-add=ruby=.haml,.feature,.ru,.rake
 --type-add=html=.erb,.haml
 --type-add=css=.sass,.scss
+--type-add=js=.coffee
 --type-set=markdown=.markdown,.mdown,.md
 --type-set=plist=.plist
 --ignore-dir=vendor/bundle
