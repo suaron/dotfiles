@@ -124,3 +124,5 @@ syspip(){
   PIP_REQUIRE_VIRTUALENV="" pip "$@"
 }
 
+alias show_hidden_files='defaults write com.apple.Finder AppleShowAllFiles -bool true; sudo killall Finder;'
+alias hide_hidden_files='defaults write com.apple.Finder AppleShowAllFiles -bool false; sudo killall Finder;'
