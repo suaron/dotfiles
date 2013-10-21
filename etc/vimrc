@@ -1,19 +1,117 @@
 set nocompatible
-syntax enable
+set encoding=utf-8         " Default encoding
+set exrc                   " load vimrc from current directory
 
 call pathogen#infect()
 call pathogen#helptags()
+filetype plugin indent on  " Load the plugin and indent settings for the detected filetype
+syntax enable
 
-filetype plugin indent on                   " Load the plugin and indent settings for the detected filetype
+runtime macros/matchit.vim " enables % to cycle through `if/else/endif`
 
-set history=1000
-set fileencodings=utf-8,cp1251,koi8-r,cp866 " List auto detected file encoding
-set encoding=utf-8                          " Default encoding
-set showmode
+set synmaxcol=800 " don't try to highlight long lines
+set history=200
 
-"colorscheme railscasts+
+let g:solarized_termcolors=256
 set background=dark
 colorscheme solarized
+
+set wildmenu " Turn on wild menu
+
+"Tab completion
+set wildignore+=tmp/**,*.rbc,.rbx,*.scssc,*.sassc          " ignore Rubinius, Sass cache files
+set wildignore+=log/**                                     " ignore logs
+set wildignore+=bundle/**,vendor/bundle/**,vendor/cache/** " ignore Bundler standalone/vendor installs & gems
+set wildignore+=node_modules/**
+
+set ruler        " Show ruler
+set hidden       " Switch betwin buffers without savingl
+set autoread     " Auto-reload buffers when file changed on disk
+set number       " Show line numbers
+set cursorline   " Cursor highlights
+set nofoldenable " Turn off folding
+
+set clipboard=unnamed " use the system clipboard
+
+" Indicator chars
+set listchars=tab:▸\ ,trail:•,extends:❯,precedes:❮
+set showbreak=↪\
+
+set sidescroll=5 " minimum number of columns to scroll horizontally
+set nojoinspaces " Use only 1 space after "." when joining lines, not 2
+
+set mouse=a "Use mouse everywhere
+
+" Time out on key codes but not mappings.
+" Basically this makes terminal Vim work sanely.
+set notimeout
+:set timeout timeoutlen=1000 ttimeoutlen=100
+
+
+set backspace=indent,eol,start " backspace through everything in insert mode
+
+" Some file types should wrap their text
+function! s:setupWrapping()
+  set wrap
+  set wrapmargin=2
+  set textwidth=80
+endfunction
+
+if has("autocmd")
+  " Avoid showing trailing whitespace when in insert mode
+  au InsertEnter * :set listchars-=trail:•
+  au InsertLeave * :set listchars+=trail:•
+
+  " In Makefiles, use real tabs, not tabs expanded to spaces
+  au FileType make set noexpandtab
+
+  " Make sure all markdown files have the correct filetype set and setup wrapping
+  au BufRead,BufNewFile *.{md,markdown,mdown,mkd,mkdn,txt} setf markdown | call s:setupWrapping()
+
+  " Treat JSON files like JavaScript
+  au BufNewFile,BufRead *.json set ft=javascript
+
+  " Remember last location in file, but not for commit messages.
+  " see :help last-position-jump
+  au BufReadPost * if &filetype !~ '^git\c' && line("'\"") > 0 && line("'\"") <= line("$")
+    \| exe "normal! g`\"" | endif
+
+  " mark Jekyll YAML frontmatter as comment
+  au BufNewFile,BufRead *.{md,markdown,html,xml} sy match Comment /\%^---\_.\{-}---$/
+
+  au BufRead,BufNewFile {Gemfile,Rakefile,Vagrantfile,Thorfile,Procfile,config.ru,*.rake,*.ru,*.god,*.rabl} set ft=ruby
+
+  au BufRead,BufNewFile {.localrc,localrc} set ft=sh
+
+  autocmd BufNewFile,BufRead *.slim set ft=slim
+
+  " magic markers: enable using `H/S/J/C to jump back to
+  " last HTML, stylesheet, JS or Ruby code buffer
+  au BufLeave *.{erb,html}      exe "normal! mH"
+  au BufLeave *.{css,scss,sass} exe "normal! mS"
+  au BufLeave *.{js,coffee}     exe "normal! mJ"
+  au BufLeave *.{rb}            exe "normal! mC"
+endif
+
+" Fix <Enter> for comm
+set fo+=cr
+
+let mapleader = "," " Set Leader
+
+" map markdown preview
+map <leader>m :!open -a Marked %<cr><cr>
+
+" Move between open buffers.
+map <C-n> :bnext<CR>
+map <C-p> :bprev<CR>
+
+" toggle spell check with <F5> for English
+map <F5> :setlocal spell! spelllang=en_us<cr>
+imap <F5> <ESC>:setlocal spell! spelllang=en_us<cr>
+
+" toggle spell check with <F6> for Russian
+map <F6> :setlocal spell! spelllang=ru_RU<cr>
+imap <F6> <ESC>:setlocal spell! spelllang=ru_RU<cr>
 
 " Turn backup off
 set nobackup
@@ -22,34 +120,15 @@ set noswapfile
 
 "Tab completion
 set wildmode=list:longest,list:full
-set wildignore+=*.o,*.out,*.obj,.git,*.rbc,*.rbo,*.class,.svn,*.gem
-set wildignore+=*.zip,*.tar.gz,*.tar.bz2,*.rar,*.tar.xz
-set wildignore+=*/vendor/gems/*,*/vendor/cache/*,*/.bundle/*,*/.sass-cache/*
-set wildignore+=*.swp,*~,._*
 
-set nolazyredraw " Turn off lazy redraw
-set ruler        " Show ruler
-set hidden       " Switch betwin buffers without savingl
-set wildmenu     " Turn on wild menu
-set number       " Show line numbers
-set showcmd      " Display incomplete commands
-set cursorline   " Cursor highlights
-set nofoldenable " Turn off folding
+" Indicator chars
+set listchars=tab:▸\ ,trail:•,extends:❯,precedes:❮
+set showbreak=↪\
+set sidescroll=5      " minimum number of columns to scroll horizontally
 
-"Invisible characters
-set listchars=tab:▸\ ,eol:¬
+" Disable swap files; systems don't crash that often these days
+set updatecount=0
 
-"Status bar
-set statusline=%<%f%h%m%r\ %b\ %{fugitive#statusline()}%{&encoding}\ 0x\ \ %l,%c%V\ %P
-set laststatus=2
-set sidescrolloff=2
-
-set mouse=a "Use mouse everywhere
-
-set hlsearch    " Highlight search
-set incsearch   " Incremental search, search as you type
-set ignorecase  " Ignore case when searching
-set smartcase   " Ignore case when searching lowercase
 set autoindent  " Automatic indent new lines
 set smartindent " Be smart about it
 set nowrap      " Do not wrap lines
@@ -58,73 +137,48 @@ set softtabstop=2
 set shiftwidth=2
 set tabstop=4
 
+set sessionoptions=curdir,buffers,tabpages "session options
+
 "Expand tabs to spaces
 set expandtab
 set nosmarttab
 
-"Support for numbered/bullet lists
-set formatoptions+=n
+"Disable bell
+set vb " enable visual bell (disable audio bell)
+set t_vb=
 
-" Allow virtual edit in visual block ..
-set virtualedit=block
-
-" Remember last location in file
-if has("autocmd")
-  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
-    \| exe "normal g'\"" | endif
+"Status bar
+set sidescrolloff=2
+if has("statusline") && !&cp
+  set laststatus=2              " always show the status bar
+  set statusline=%f\ %m\ %r     " filename, modified, readonly
+  set statusline+=%{fugitive#statusline()}
+  set statusline+=\ %l/%L[%p%%] " current line/total lines
+  set statusline+=\ %v[0x%B]    " current column [hex char]
 endif
 
-" Some file types should wrap their text
-function! s:setupWrapping()
-  set wrap
-  set linebreak
-  set textwidth=80
-  set nolist
-endfunction
+set mouse=a    " Use mouse everywhere
 
-au BufRead,BufNewFile {Gemfile,Rakefile,Vagrantfile,Thorfile,Procfile,config.ru,*.rake,*.ru,*.god,*.rabl} set ft=ruby
-au BufRead,BufNewFile {.localrc,localrc} set ft=sh
-au BufRead,BufNewFile *.sql set ft=pgsql
-au BufRead,BufNewFile *.haml set ft=haml
-au BufNewFile,BufRead *.json set ft=javascript
-" Make sure all mardown files have the correct filetype set and setup wrapping
-au BufRead,BufNewFile *.{md,markdown,mdown,mkd,mkdn,txt} setf markdown | call s:setupWrapping()
-
-au Filetype gitcommit set tw=80 spell
-au Filetype ruby      set ts=2
+set hlsearch   " Highlight search
+set incsearch  " Incremental search, search as you type
+set ignorecase " Ignore case when searching
+set smartcase  " Ignore case when searching lowercase
+set gdefault   " have :s///g flag by default on
 
 set splitbelow splitright
 
-"Disable bell
-set novisualbell
-set t_vb=
+" paste lines from unnamed register and fix indentation
+nmap <leader>p pV`]=
+nmap <leader>P PV`]=
 
-"Fix <Enter> for comment
-set fo+=cr
+" You don't know what you're missing if you don't use this.
+nmap <C-e> :e#<CR>
 
-set sessionoptions=curdir,buffers,tabpages "session options
+" In command-line mode, C-a jumps to beginning (to match C-e)
+cnoremap <C-a> <Home>
 
-let mapleader = "," "Set Leader
-
-"Hide last search highlighting
-map <Leader>h :nohlsearch<cr>
-
-"Write with sudo with w!!
-cmap w!! w !sudo tee % >/dev/null
-
-"Show CommandT search panel
-map <Leader>f :CommandT<CR>
-let g:CommandTMaxHeight=30
-
-"Show NERDTree
-map <Leader>n :NERDTreeToggle<CR>
-
-"Show current file in NERDTree
-map <leader>r :NERDTreeFind<CR>
-
-"C-c and C-v - Copy/Paste with native clipbord
-vmap <C-C> "+yi
-imap <C-V> <esc>"+gPi
+" http://vimcasts.org/e/14
+cnoremap %% <C-R>=expand('%:h').'/'<cr>
 
 " Strip trailing whitespace (,ss)
 function! StripWhitespace()
@@ -136,40 +190,43 @@ function! StripWhitespace()
 endfunction
 noremap <leader>ss :call StripWhitespace()<CR>
 
-" You don't know what you're missing if you don't use this.
-nmap <C-e> :e#<CR>
+" clear the search buffer when hitting return
+:nnoremap <CR> :nohlsearch<cr>
 
-" Move between open buffers.
-map <C-n> :bnext<CR>
-map <C-p> :bprev<CR>
+" map git commands
+map <leader>b :Gblame<cr>
+map <leader>l :!clear && git log -p %<cr>
+map <leader>d :!clear && git diff %<cr>
 
-" Let's try buffkill-vim using my favorite Emacs binding...
-nmap <Esc>k :BD<CR>
-nmap <M-k> :BD<CR>
-nmap <D-k> :BD<CR>
+map <leader>F :Ack<space>
 
-" JSON Beautify
-command! JSONFormat :execute ':%!python -m json.tool' | set filetype=javascript
+map <leader>f :CommandT <cr>
+let g:CommandTMaxHeight=30
+if &term =~ "xterm" || &term =~ "screen"
+  " as of March 2013, with current iTerm (1.0.0.20130319), tmux (1.8)
+  " and Vim (7.3, with patches 1-843), this is all I need:
+  let g:CommandTCancelMap     = ['<ESC>', '<C-c>']
+  " when I originally started using Command-T inside a terminal,
+  " I used to need these as well:
+  let g:CommandTSelectNextMap = ['<Up>', '<ESC>OB']
+  let g:CommandTSelectPrevMap = ['<Down>', '<ESC>OA']
+endif
 
-" Rename.vim  -  Rename a buffer within Vim and on the disk
-" Copyright June 2007 by Christian J. Robinson <infynity@onewest.net>
-" Distributed under the terms of the Vim license.  See ":help license".
-" http://www.infynity.spodzone.com/vim/Rename.vim
-" Usage: :Rename[!] {newname}
-command! -nargs=* -complete=file -bang Rename :call Rename("<args>", "<bang>")
-function! Rename(name, bang)
-    let l:curfile = expand("%:p")
-    let v:errmsg = ""
-    silent! exe "saveas" . a:bang . " " . a:name
-    if v:errmsg =~# '^$\|^E329'
-        if expand("%:p") !=# l:curfile && filewritable(expand("%:p"))
-            silent exe "bwipe! " . l:curfile
-            if delete(l:curfile)
-                echoerr "Could not delete " . l:curfile
-            endif
-        endif
-    else
-        echoerr v:errmsg
-    endif
-endfunction
+vnoremap <leader>h :s/:\(\w*\) *=>/\1:/g<cr> " replace hash rockets
+
+" Move around splits with <c-hjkl>
+nnoremap <c-j> <c-w>j
+nnoremap <c-k> <c-w>k
+nnoremap <c-h> <c-w>h
+nnoremap <c-l> <c-w>l
+
+
+cmap w!! w !sudo tee > /dev/null %
+
+" disable cursor keys in normal mode
+" map <Left>  :echo "no!"<cr>
+" map <Right> :echo "no!"<cr>
+" map <Up>    :echo "no!"<cr>
+" map <Down>  :echo "no!"<cr>
+"
 :cabbrev help tab help
