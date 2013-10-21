@@ -7,10 +7,10 @@ set encoding=utf-8 nobomb
 
 export EDITOR='vim'
 
-if [[ "$TERM_PROGRAM" =~ iTerm|Apple_Terminal ]] && [[ -x "`which mvim`" ]]; then
-  export EDITOR='mvim -f'
-  export BUNDLER_EDITOR='mvim'
-  export GEM_EDITOR='mvim'
+if [[ "$TERM_PROGRAM" =~ iTerm|Apple_Terminal ]] && [[ -x "`which vim`" ]]; then
+  export EDITOR='vim'
+  export BUNDLER_EDITOR='vim'
+  export GEM_EDITOR='vim'
 fi
 
 # history
