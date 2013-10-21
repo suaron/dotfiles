@@ -38,7 +38,6 @@
   standup = shortlog --pretty=format:'%Cred%h%Creset %s %Cgreen(%cr)%Creset' --since='2 days ago' --all
   unstage = reset HEAD
   uncommit = reset --soft HEAD^
-  edit-conflicts = "!f() { git status -s | grep ^UU | awk '{print $2}' ; }; mvim `f`"
 
 [core]
   filemode = true
@@ -82,10 +81,6 @@
   cmd = opendiff \"$LOCAL\" \"$REMOTE\"
   path =
 
-[mergetool "sourcetree"]
-  cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-  trustExitCode = true
-
 [browser "safari"]
   cmd = open -a Safari.app
 
@@ -100,9 +95,6 @@
 
 [include]
   path = ~/.gitconfig.local
-
-[mergetool "fugitive"]
-  cmd = mvim -f -c \"Gdiff\" \"$MERGED\"
 
 [pull]
   rebase = true
