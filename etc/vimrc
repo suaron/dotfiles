@@ -212,6 +212,11 @@ if &term =~ "xterm" || &term =~ "screen"
   let g:CommandTSelectPrevMap = ['<Down>', '<ESC>OA']
 endif
 
+let g:SuperTabDefaultCompletionType = "context"
+let g:SuperTabCompletionContexts = ['s:ContextText', 's:ContextDiscover']
+let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&completefunc']
+let g:SuperTabContextDiscoverDiscovery = ["&completefunc:<c-x><c-u>", "&omnifunc:<c-x><c-o>"]
+
 vnoremap <leader>h :s/:\(\w*\) *=>/\1:/g<cr> " replace hash rockets
 
 " Move around splits with <c-hjkl>
@@ -220,13 +225,6 @@ nnoremap <c-k> <c-w>k
 nnoremap <c-h> <c-w>h
 nnoremap <c-l> <c-w>l
 
-
 cmap w!! w !sudo tee > /dev/null %
 
-" disable cursor keys in normal mode
-" map <Left>  :echo "no!"<cr>
-" map <Right> :echo "no!"<cr>
-" map <Up>    :echo "no!"<cr>
-" map <Down>  :echo "no!"<cr>
-"
 :cabbrev help tab help
