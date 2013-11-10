@@ -1,4 +1,7 @@
 let g:rails_projections = {
+\    "test/*.rb": {
+\      "command": "test"
+\    },
 \    "db/seeds/*.rb": {
 \      "command": "seed"
 \    },
@@ -6,6 +9,11 @@ let g:rails_projections = {
 \      "command": "form",
 \      "test": "spec/forms/%s_spec.rb",
 \      "template": "class %S\nend"
+\    },
+\    "app/serializers/*.rb": {
+\      "command": "serializer",
+\      "test": "spec/serializers/%s.rb",
+\      "template": "class %S < ActiveModel::Serializer\n\nend"
 \    },
 \    "app/workers/*.rb": {
 \      "command": "worker",
@@ -21,10 +29,14 @@ let g:rails_projections = {
 \    },
 \    "Gemfile": { "command": "gemfile"  },
 \    "config/*.rb": { "command": "cfg"  },
+\    "config/routes.rb": { "command": "routes"  },
 \    "spec/support/*.rb": {"command": "support"},
 \    "spec/features/*_spec.rb": {
 \      "command": "feature",
 \      "template": "require 'spec_helper'\n\nfeature '%h' do\n\nend",
+\    },
+\    "spec/factories/*.rb": {
+\      "command": "factories",
 \    }
 \ }
  
