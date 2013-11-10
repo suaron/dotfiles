@@ -124,5 +124,6 @@ syspip(){
   PIP_REQUIRE_VIRTUALENV="" pip "$@"
 }
 
+alias restart_finder='killall Finder'
 alias show_files="defaults write com.apple.finder AppleShowAllFiles YES && restart_finder"
 alias hide_files="defaults write com.apple.finder AppleShowAllFiles NO && restart_finder"
