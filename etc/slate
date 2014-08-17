@@ -10,6 +10,8 @@ alias soy screenOriginY
 alias ssx screenSizeX
 alias ssy screenSizeY
 
+alias hyper ctrl;shift;alt;cmd
+
 # Position aliases
 alias centered ${sox}+${ssx}/8;${soy} ${ssx}/8*6;${ssy}
 alias fullscreen ${sox};${soy} ${ssx};${ssy}
@@ -23,10 +25,10 @@ alias bottomLeftQuarter ${sox};${soy}+${ssy}/2 ${ssx}/2;${ssy}/2
 alias bottomRightQuarter ${sox}+${ssx}/2;${soy}+${ssy}/2 ${ssx}/2;${ssy}/2
 
 # Bindings
-bind down:cmd;ctrl move ${centered}
-bind up:cmd;ctrl move ${fullscreen}
-bind left:cmd;ctrl move ${leftHalf}
-bind right:cmd;ctrl move ${rightHalf}
+bind down:${hyper} move ${centered}
+bind up:${hyper} move ${fullscreen}
+bind left:${hyper} move ${leftHalf}
+bind right:${hyper} move ${rightHalf}
 
 # Grid
 bind esc:ctrl grid
