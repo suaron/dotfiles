@@ -1,72 +1,46 @@
-set nocompatible
-set encoding=utf-8         " Default encoding
-set exrc                   " load vimrc from current directory
-
 call pathogen#infect()
 call pathogen#helptags()
-filetype plugin indent on  " Load the plugin and indent settings for the detected filetype
-syntax enable
 
-runtime macros/matchit.vim " enables % to cycle through `if/else/endif`
+set nocompatible
 
-set synmaxcol=800 " don't try to highlight long lines
-set history=200
+" Expand tabs to spaces
+set expandtab
+set nosmarttab
+
+set softtabstop=2
+set shiftwidth=2
+set tabstop=4
 
 let g:solarized_termcolors=256
-set background=dark
 colorscheme solarized
+set background=dark
 
-set wildmenu " Turn on wild menu
+set wildignore+=tags
 
-"Tab completion
-set wildignore+=tmp/**,*.rbc,.rbx,*.scssc,*.sassc          " ignore Rubinius, Sass cache files
-set wildignore+=log/**                                     " ignore logs
-set wildignore+=bundle/**,vendor/bundle/**,vendor/cache/** " ignore Bundler standalone/vendor installs & gems
-set wildignore+=node_modules/**
+" Switch betwin buffers without savingl
+set hidden
 
-set ruler        " Show ruler
-set hidden       " Switch betwin buffers without savingl
-set autoread     " Auto-reload buffers when file changed on disk
-set number       " Show line numbers
-set cursorline   " Cursor highlights
-set nofoldenable " Turn off folding
+" Show line numbers
+set number
 
-set clipboard=unnamed " use the system clipboard
+" Cursor highlights
+set cursorline
+
+" Turn off folding
+set nofoldenable
+
+" Use the system clipboard
+set clipboard=unnamed
 
 " Indicator chars
-set listchars=tab:▸\ ,trail:•,extends:❯,precedes:❮
 set showbreak=↪\
 
-set sidescroll=5 " minimum number of columns to scroll horizontally
-set nojoinspaces " Use only 1 space after "." when joining lines, not 2
-
-set mouse=a "Use mouse everywhere
-
-" Time out on key codes but not mappings.
-" Basically this makes terminal Vim work sanely.
-set notimeout
-:set timeout timeoutlen=1000 ttimeoutlen=100
-
-
-set backspace=indent,eol,start " backspace through everything in insert mode
-
-" Some file types should wrap their text
-function! s:setupWrapping()
-  set wrap
-  set wrapmargin=2
-  set textwidth=80
-endfunction
+" Use mouse everywhere
+set mouse=a
 
 if has("autocmd")
-  " Avoid showing trailing whitespace when in insert mode
-  au InsertEnter * :set listchars-=trail:•
-  au InsertLeave * :set listchars+=trail:•
-
   " In Makefiles, use real tabs, not tabs expanded to spaces
   au FileType make set noexpandtab
-
-  " Make sure all markdown files have the correct filetype set and setup wrapping
-  au BufRead,BufNewFile *.{md,markdown,mdown,mkd,mkdn,txt} setf markdown | call s:setupWrapping()
 
   " Treat JSON files like JavaScript
   au BufNewFile,BufRead *.json set ft=javascript
@@ -74,42 +48,24 @@ if has("autocmd")
   " Remember last location in file, but not for commit messages.
   " see :help last-position-jump
   au BufReadPost * if &filetype !~ '^git\c' && line("'\"") > 0 && line("'\"") <= line("$")
-    \| exe "normal! g`\"" | endif
+        \| exe "normal! g`\"" | endif
 
-  " mark Jekyll YAML frontmatter as comment
-  au BufNewFile,BufRead *.{md,markdown,html,xml} sy match Comment /\%^---\_.\{-}---$/
-
-  au BufRead,BufNewFile {Gemfile,Rakefile,Vagrantfile,Thorfile,Procfile,config.ru,*.rake,*.ru,*.god,*.rabl} set ft=ruby
-
+  au BufRead,BufNewFile {Procfile} set ft=ruby
   au BufRead,BufNewFile {.localrc,localrc} set ft=sh
-
-  autocmd BufNewFile,BufRead *.slim set ft=slim
-
-  " magic markers: enable using `H/S/J/C to jump back to
-  " last HTML, stylesheet, JS or Ruby code buffer
-  au BufLeave *.{erb,html}      exe "normal! mH"
-  au BufLeave *.{css,scss,sass} exe "normal! mS"
-  au BufLeave *.{js,coffee}     exe "normal! mJ"
-  au BufLeave *.{rb}            exe "normal! mC"
 endif
 
-" Fix <Enter> for comm
-set fo+=cr
-
-let mapleader = "," " Set Leader
-
-" map markdown preview
-map <leader>m :!open -a Marked %<cr><cr>
+" Set Leader
+let mapleader = ","
 
 " Move between open buffers.
 map <C-n> :bnext<CR>
 map <C-p> :bprev<CR>
 
-" toggle spell check with <F5> for English
+" Toggle spell check with <F5> for English
 map <F5> :setlocal spell! spelllang=en_us<cr>
 imap <F5> <ESC>:setlocal spell! spelllang=en_us<cr>
 
-" toggle spell check with <F6> for Russian
+" Toggle spell check with <F6> for Russian
 map <F6> :setlocal spell! spelllang=ru_RU<cr>
 imap <F6> <ESC>:setlocal spell! spelllang=ru_RU<cr>
 
@@ -117,57 +73,44 @@ imap <F6> <ESC>:setlocal spell! spelllang=ru_RU<cr>
 set nobackup
 set nowb
 set noswapfile
-
-"Tab completion
-set wildmode=list:longest,list:full
-
-" Indicator chars
-set listchars=tab:▸\ ,trail:•,extends:❯,precedes:❮
-set showbreak=↪\
-set sidescroll=5      " minimum number of columns to scroll horizontally
-
-" Disable swap files; systems don't crash that often these days
 set updatecount=0
 
-set autoindent  " Automatic indent new lines
-set smartindent " Be smart about it
-set nowrap      " Do not wrap lines
+" Tab completion
+set wildmode=list:longest,list:full
 
-set softtabstop=2
-set shiftwidth=2
-set tabstop=4
+" Be smart about it
+set smartindent
 
-set sessionoptions=curdir,buffers,tabpages "session options
+" Do not wrap lines
+set nowrap
 
-"Expand tabs to spaces
-set expandtab
-set nosmarttab
-
-"Disable bell
-set vb " enable visual bell (disable audio bell)
+" Enable visual bell (disable audio bell)
+set vb
 set t_vb=
 
-"Status bar
+" Status bar
 set sidescrolloff=2
 if has("statusline") && !&cp
-  set laststatus=2              " always show the status bar
-  set statusline=%f\ %m\ %r     " filename, modified, readonly
+  set laststatus=2                         " always show the status bar
+  set statusline=%f\ %m\ %r                " filename, modified, readonly
   set statusline+=%{fugitive#statusline()}
-  set statusline+=\ %l/%L[%p%%] " current line/total lines
-  set statusline+=\ %v[0x%B]    " current column [hex char]
+  set statusline+=\ %l/%L[%p%%]            " current line/total lines
+  set statusline+=\ %v[0x%B]               " current column [hex char]
 endif
 
-set mouse=a    " Use mouse everywhere
+" Highlight search
+set hlsearch
 
-set hlsearch   " Highlight search
-set incsearch  " Incremental search, search as you type
-set ignorecase " Ignore case when searching
-set smartcase  " Ignore case when searching lowercase
-set gdefault   " have :s///g flag by default on
+" Ignore case when searching
+set ignorecase
 
-set splitbelow splitright
+" Ignore case when searching lowercase
+set smartcase
 
-" paste lines from unnamed register and fix indentation
+" Have :s///g flag by default on
+set gdefault
+
+" Paste lines from unnamed register and fix indentation
 nmap <leader>p pV`]=
 nmap <leader>P PV`]=
 
@@ -179,6 +122,7 @@ cnoremap <C-a> <Home>
 
 " http://vimcasts.org/e/14
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
+cnoremap %$ <C-R>=expand('%:t:r')<cr>
 
 " Strip trailing whitespace (,ss)
 function! StripWhitespace()
@@ -190,13 +134,8 @@ function! StripWhitespace()
 endfunction
 noremap <leader>ss :call StripWhitespace()<CR>
 
-" clear the search buffer when hitting return
-:nnoremap <CR> :nohlsearch<cr>
-
-" map git commands
-map <leader>b :Gblame<cr>
-map <leader>l :!clear && git log -p %<cr>
-map <leader>d :!clear && git diff %<cr>
+" Clear the search buffer when hitting return
+nnoremap <CR> :nohlsearch<cr>
 
 map <leader>F :Ack<space>
 
@@ -217,14 +156,4 @@ let g:SuperTabCompletionContexts = ['s:ContextText', 's:ContextDiscover']
 let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&completefunc']
 let g:SuperTabContextDiscoverDiscovery = ["&completefunc:<c-x><c-u>", "&omnifunc:<c-x><c-o>"]
 
-vnoremap <leader>h :s/:\(\w*\) *=>/\1:/g<cr> " replace hash rockets
-
-" Move around splits with <c-hjkl>
-nnoremap <c-j> <c-w>j
-nnoremap <c-k> <c-w>k
-nnoremap <c-h> <c-w>h
-nnoremap <c-l> <c-w>l
-
-cmap w!! w !sudo tee > /dev/null %
-
-:cabbrev help tab help
+cabbrev help tab help
