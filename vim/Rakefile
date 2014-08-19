@@ -1,12 +1,5 @@
-desc "Remove 'backup autoload vim-pathogen' folders"
-task :clean do
-  dirs = %w(backup autoload vim-pathogen).map{|dir| File.expand_path dir}
-  FileUtils.rm_rf(dirs)
-end
-
 desc "Install vim bundles"
 task :install do
-  prepare_install
   sh "cd .. && git submodule sync >/dev/null"
   sh "cd .. && git submodule update --init"
 end
@@ -14,18 +7,6 @@ end
 desc "Upgrade bundles from its upstream"
 task :upgrade do
   system "cd .. && git submodule foreach ' git pull --quiet --ff-only --no-rebase origin master '"
-end
-
-def prepare_install
-  dirs = %w(backup).map{|dir| File.expand_path dir}
-  FileUtils.mkdir_p(dirs)
-
-  #install vim-pathogen.git
-  sh "git clone https://github.com/tpope/vim-pathogen.git vim-pathogen --depth=1"
-  FileUtils.cd "vim-pathogen" do
-    FileUtils.mv("autoload", "..")
-  end
-  FileUtils.rm_rf("vim-pathogen")
 end
 
 desc "Build CommandT plugin"
@@ -36,4 +17,4 @@ task :build_command_t do
   end
 end
 
-task :default => [:clean, :install, :build_command_t]
+task :default => [:install, :build_command_t]
