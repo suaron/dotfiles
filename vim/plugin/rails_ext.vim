@@ -2,6 +2,10 @@ let g:rails_projections = {
 \    "test/*.rb": {
 \      "command": "test"
 \    },
+\    "app/policies/*.rb": {
+\      "command": "policies",
+\      "test": "spec/policies/%s_spec.rb"
+\    },
 \    "db/seeds/*.rb": {
 \      "command": "seed"
 \    },
@@ -9,6 +13,10 @@ let g:rails_projections = {
 \      "command": "serializer",
 \      "test": "spec/serializers/%s.rb",
 \      "template": "class %S < ActiveModel::Serializer\n\nend"
+\    },
+\    "app/messengers/*.rb": {
+\      "command": "messengers",
+\      "test": "spec/messengers/%s.rb"
 \    },
 \    "app/workers/*.rb": {
 \      "command": "worker",
@@ -18,12 +26,18 @@ let g:rails_projections = {
 \    "app/queries/*.rb": {
 \      "command": "queries",
 \      "test": "spec/queries/%s_spec.rb",
-\      "template": "class %SQuery\n\nend"
+\      "template": "class %S\nend"
 \    },
 \    "app/services/*.rb": {
 \      "command": "service",
 \      "test": "spec/services/%s_spec.rb",
-\      "template": "class %S\n\n  def initialize\n  end\nend"
+\      "alternate": ["spec/services/%s_spec.rb"],
+\      "template": "class %S\n  def initialize\n  end\nend"
+\    },
+\    "app/decorators/*.rb": {
+\      "command": "decorator",
+\      "test": "spec/decorators/%s_spec.rb",
+\      "template": "class %S < LittleDecorator\nend"
 \    },
 \    "app/uploaders/*.rb": {
 \      "command": "uploaders",
@@ -39,30 +53,9 @@ let g:rails_projections = {
 \    },
 \    "spec/factories/*.rb": {
 \      "command": "factories",
+\    },
+\    "app/validators/*.rb": {
+\      "command": "validator",
+\      "template": "class %S < ActiveModel::EachValidator\n  def validate_each(record, attribute, value)\n  end\nend"
 \    }
-\ }
- 
-let g:rails_gem_projections = {
-\   "carrierwave": {
-\     "app/uploaders/*_uploader.rb": {
-\       "command": "uploader",
-\       "template":
-\       "class %SUploader < CarrierWave::Uploader::Base\nend"
-\     }
-\   },
-\   "worker": {
-\     "app/workers/*_job.rb": {
-\       "command": "worker",
-\       "template": "class %SJob\n\n  \n@queue = :main\ndef self.perform\n  end\nend"
-\     }
-\   },
-\   "draper": {
-\     "app/decorators/*_decorator.rb": {
-\       "command": "decorator",
-\       "affinity": "model",
-\       "test": "spec/decorators/%s_spec.rb",
-\       "related": "app/models/%s.rb",
-\       "template": "class %SDecorator < Draper::Decorator\nend"
-\     }
-\   }
 \ }
