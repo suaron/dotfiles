@@ -13,5 +13,9 @@ command! -narg=0 FormattingXML :silent exe '%!xmllint --format -'
 command! -narg=0 FormattingHTML :silent exe '%! tidy -config ~/.vim/ftplugin/tidyrc_html.txt'
 command! -narg=0 FormattingJS :call g:Jsbeautify()<cr>
 
+command! PrettyPrintJSON %!python -m json.tool
+command! PrettyPrintHTML !tidy -mi -html -wrap 0 %
+command! PrettyPrintXML !tidy -mi -xml -wrap 0 %
+
 " map markdown preview
 map <leader>m :!open -a "Marked 2" %<cr><cr>
