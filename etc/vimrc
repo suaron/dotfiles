@@ -80,6 +80,8 @@ set updatecount=0
 " Tab completion
 set wildmode=list:longest,list:full
 
+set complete=.,w,b,u,t,i
+
 " Be smart about it
 set smartindent
 
@@ -157,5 +159,7 @@ let g:SuperTabDefaultCompletionType = "context"
 let g:SuperTabCompletionContexts = ['s:ContextText', 's:ContextDiscover']
 let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&completefunc']
 let g:SuperTabContextDiscoverDiscovery = ["&completefunc:<c-x><c-u>", "&omnifunc:<c-x><c-o>"]
+
+au BufRead,BufNewFile /etc/nginx/*,/usr/local/nginx/conf/* if &ft == '' | setfiletype nginx | endif
 
 cabbrev help tab help
