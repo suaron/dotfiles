@@ -42,7 +42,7 @@ alias reloadbash='source ~/.bash_profile'
 #http heaers en1 (airport)
 alias sniff_headers="sudo tcpflow -c -p -i en0 | httpflow.py"
 
-alias uninstall_all_gems='gem list |cut -d" " -f1|xargs gem uninstall -aIx'
+alias uninstall_all_gems='gem list |cut -d" " -f1|grep -v test-unit|grep -v psych|grep -v rdoc|grep -v rake|grep -v io-console|grep -v minitest|grep -v bigdecimal|grep -v json|xargs gem uninstall -aIx'
 
 alias gemdep="gem dependency"
 
