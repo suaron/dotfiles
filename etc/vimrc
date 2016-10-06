@@ -143,6 +143,11 @@ nnoremap <CR> :nohlsearch<cr>
 
 map <leader>F :Ack<space>
 
+xmap \\  <Plug>Commentary<CR>
+nmap \\  <CR><Plug>Commentary
+nmap \\\ <Plug>CommentaryLine<CR>
+nmap \\u <Plug>CommentaryUndo<CR>
+
 map <leader>f :CommandT <cr>
 let g:CommandTMaxHeight=30
 if &term =~ "xterm" || &term =~ "screen"
