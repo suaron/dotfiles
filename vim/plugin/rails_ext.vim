@@ -6,6 +6,10 @@ let g:rails_projections = {
 \      "command": "policies",
 \      "test": "spec/policies/%s_spec.rb"
 \    },
+\    "app/forms/*.rb": {
+\      "command": "forms",
+\      "test": "spec/forms/%s_spec.rb"
+\    },
 \    "db/seeds/*.rb": {
 \      "command": "seed"
 \    },

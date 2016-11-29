@@ -1,3 +1,4 @@
 vim/swap
 vim/.netrwhist
-vim/autoload/pathogen.vim
+vim/plugged/
+
