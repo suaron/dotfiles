@@ -11,5 +11,5 @@ do
     fi
 done
 
-ln -sf $basepath/vim ~
+ln -sf $basepath/vim ~/.vim
 ln -sf $basepath/gitignore ~/.gitignore
