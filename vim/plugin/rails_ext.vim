@@ -1,6 +1,18 @@
 let g:rails_projections = {
+\    "app/javascript/*": {
+\      "command": "pack"
+\    },
+\    "app/admin/*.rb": {
+\      "command": "admin"
+\    },
 \    "test/*.rb": {
 \      "command": "test"
+\    },
+\    "app/graph/*.rb": {
+\      "command": "graph"
+\    },
+\    "db/views/*.sql": {
+\      "command": "dbviews"
 \    },
 \    "app/policies/*.rb": {
 \      "command": "policies",
