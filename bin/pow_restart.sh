@@ -1,1 +1,0 @@
-touch ~/.pow/restart.txt
