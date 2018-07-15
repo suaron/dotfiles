@@ -1,7 +1,16 @@
+" set shell=$SHELL\ -l
+set shell=bash
+
 set nocompatible
 
 let g:solarized_termcolors=256
 set background=dark
+
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
 
 call plug#begin('~/.vim/plugged')
 
@@ -20,7 +29,13 @@ Plug 'tpope/vim-ragtag'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
-Plug 'wincent/command-t', { 'tag': '4.0' }
+Plug 'ctrlpvim/ctrlp.vim', { 'tag': '1.80' }
+Plug 'slim-template/vim-slim'
+Plug 'AndrewRadev/splitjoin.vim'
+Plug 'jlanzarotta/bufexplorer'
+Plug 'chrisbra/csv.vim'
+Plug 'lambdalisue/suda.vim'
+Plug 'tpope/vim-rhubarb'
 
 " Ruby
 Plug 'tpope/vim-rails'
@@ -31,11 +46,23 @@ Plug 'nelstrom/vim-textobj-rubyblock'
 Plug 'vim-ruby/vim-ruby', { 'tag': 'stable-20160928' }
 Plug 'aliou/sql-heredoc.vim'
 
+" Elixir
+Plug 'elixir-lang/vim-elixir'
+Plug 'slashmili/alchemist.vim'
+Plug 'c-brenn/phoenix.vim'
+Plug 'tpope/vim-projectionist'
+let g:alchemist_tag_disable = 1
+
+Plug 'sheerun/vim-polyglot'
+Plug 'ludovicchabant/vim-gutentags'
+let g:gutentags_cache_dir = '~/.tags_cache'
+
 " Frontend
 Plug 'groenewege/vim-less'
 Plug 'kchmck/vim-coffee-script'
 Plug 'othree/html5.vim'
 Plug 'pangloss/vim-javascript'
+Plug 'posva/vim-vue'
 
 call plug#end()
 
@@ -112,6 +139,14 @@ set updatecount=0
 
 " Tab completion
 set wildmode=list:longest,list:full
+set wildignore=*.swp,*.bak,*.pyc,*.class,*.jar,*.gif,*.png,*.jpg,*.jpeg
+set wildignore+=*.so,*.swp,*.zip,*/tmp/*,*/log/*
+set wildignore+=**/coverage       " ignores coverage
+set wildignore+=**/node_modules   " ignores node_modules
+set wildignore+=**/spec/reports   " ignores spec/reports
+set wildignore+=**/tmp/cache      " ignores tmp/cache
+set wildignore+=**/_build         " ignores elixir _build folder
+set wildignore+=**deps            " ignores elixir deps folder
 
 set complete=.,w,b,u,t,i
 
@@ -156,6 +191,11 @@ nmap <C-e> :e#<CR>
 " In command-line mode, C-a jumps to beginning (to match C-e)
 cnoremap <C-a> <Home>
 
+:command WQ wq
+:command Wq wq
+:command W w
+:command Q q
+
 " http://vimcasts.org/e/14
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
 cnoremap %$ <C-R>=expand('%:t:r')<cr>
@@ -180,27 +220,47 @@ nmap \\  <CR><Plug>Commentary
 nmap \\\ <Plug>CommentaryLine<CR>
 nmap \\u <Plug>CommentaryUndo<CR>
 
-map <leader>f :CommandT <cr>
-let g:CommandTMaxHeight=30
-if &term =~ "xterm" || &term =~ "screen"
-  " as of March 2013, with current iTerm (1.0.0.20130319), tmux (1.8)
-  " and Vim (7.3, with patches 1-843), this is all I need:
-  let g:CommandTCancelMap     = ['<ESC>', '<C-c>']
-  " when I originally started using Command-T inside a terminal,
-  " I used to need these as well:
-  let g:CommandTSelectNextMap = ['<Up>', '<ESC>OB']
-  let g:CommandTSelectPrevMap = ['<Down>', '<ESC>OA']
-endif
+map <leader>f :CtrlP <cr>
+
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+let g:ctrlp_custom_ignore = {
+  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+  \ 'file': '\v\.(exe|so|dll)$',
+  \ 'link': 'some_bad_symbolic_links',
+  \ }
+let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
 
 let g:SuperTabDefaultCompletionType = "context"
 let g:SuperTabCompletionContexts = ['s:ContextText', 's:ContextDiscover']
 let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&completefunc']
 let g:SuperTabContextDiscoverDiscovery = ["&completefunc:<c-x><c-u>", "&omnifunc:<c-x><c-o>"]
 
+" http://eduncan911.com/software/fix-slow-scrolling-in-vim-and-neovim.html
+set cursorline!
+set lazyredraw
+
 cabbrev help tab help
 
 " Start interactive EasyAlign in visual mode (e.g. vipga)
 xmap ga <Plug>(EasyAlign)
 
+" https://stackoverflow.com/questions/7000960/in-vim-why-doesnt-my-mouse-work-past-the-220th-column
+if has("mouse_sgr")
+  set ttymouse=sgr
+else
+  set ttymouse=xterm2
+end
+
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
+
+let g:rails_projections = {
+\    "Gemfile": { "command": "gemfile"  }
+\ }
+
+if has('persistent_undo')      "check if your vim version supports it
+  set undofile                 "turn on the feature  
+  set undodir=$HOME/.vim_undo  "directory where the undo files will be stored
+endif

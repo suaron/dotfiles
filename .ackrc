@@ -15,3 +15,5 @@
 --type-set=LOG=.log
 --noLOG
 --ignore-file=is:tags
+--ignore-dir=coverage
+--ignore-file=is:index.android.map
