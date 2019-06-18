@@ -42,6 +42,8 @@ alias reloadbash='source ~/.bash_profile'
 
 alias be="bundle exec"
 
+alias gitlog="git reflog --pretty=raw | tig --pretty=raw"
+
 # Empty the Trash on all mounted volumes and the main HDD
 # Also, clear Apple’s System Logs to improve shell startup speed
 alias emptytrash="sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/.Trash; sudo rm -rfv /private/var/log/asl/*.asl"
