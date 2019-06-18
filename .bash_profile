@@ -128,3 +128,8 @@ export PATH="/usr/local/sbin:$PATH"
 
 # heroku autocomplete setup
 HEROKU_AC_BASH_SETUP_PATH=/Users/dima/Library/Caches/heroku/autocomplete/bash_setup && test -f $HEROKU_AC_BASH_SETUP_PATH && source $HEROKU_AC_BASH_SETUP_PATH;
+eval "$(pyenv virtualenv-init -)"
+export PATH="/usr/local/opt/postgresql@10/bin:$PATH"
+
+PROMPT_TITLE='echo -ne "\033]0;${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/~}\007"'
+export PROMPT_COMMAND="${PROMPT_TITLE}; ${PROMPT_COMMAND}"
