@@ -37,6 +37,7 @@ Plug 'chrisbra/csv.vim'
 Plug 'lambdalisue/suda.vim'
 Plug 'tpope/vim-rhubarb'
 Plug 'gregsexton/MatchTag'
+Plug 'lifepillar/pgsql.vim'
 
 " Ruby
 Plug 'tpope/vim-rails'
@@ -267,3 +268,6 @@ if has('persistent_undo')      "check if your vim version supports it
   set undofile                 "turn on the feature  
   set undodir=$HOME/.vim_undo  "directory where the undo files will be stored
 endif
+
+let g:sql_type_default = 'pgsql'
+let g:ruby_indent_block_style = 'do'
