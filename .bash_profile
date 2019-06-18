@@ -93,10 +93,25 @@ alias restart_finder='killall Finder'
 alias show_files="defaults write com.apple.finder AppleShowAllFiles YES && restart_finder"
 alias hide_files="defaults write com.apple.finder AppleShowAllFiles NO && restart_finder"
 
-#chruby
-RUBIES=(~/.rubies/*)
-source /usr/local/share/chruby/chruby.sh
-source /usr/local/share/chruby/auto.sh
+
+export PATH="/Users/dima/.rbenv/shims:${PATH}"
+export RBENV_SHELL=bash
+source '/usr/local/Cellar/rbenv/1.1.2/libexec/../completions/rbenv.bash'
+command rbenv rehash 2>/dev/null
+rbenv() {
+  local command
+  command="${1:-}"
+  if [ "$#" -gt 0 ]; then
+    shift
+  fi
+
+  case "$command" in
+  rehash|shell)
+    eval "$(rbenv "sh-$command" "$@")";;
+  *)
+    command rbenv "$command" "$@";;
+  esac
+}
 
 #asdf Elixir and Erlang
 source $HOME/.asdf/asdf.sh
