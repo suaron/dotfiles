@@ -14,6 +14,9 @@ let g:rails_projections = {
 \    "db/views/*.sql": {
 \      "command": "dbviews"
 \    },
+\    "db/functions/*.sql": {
+\      "command": "dbfunctions"
+\    },
 \    "app/policies/*.rb": {
 \      "command": "policies",
 \      "test": "spec/policies/%s_spec.rb"

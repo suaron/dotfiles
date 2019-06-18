@@ -15,3 +15,4 @@ set intervalstyle to 'postgres_verbose';
 
 \setenv LESS '-iMFXSx4R'
 \set ECHO all
+\setenv EDITOR '/usr/local/bin/vim'

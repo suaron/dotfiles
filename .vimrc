@@ -36,6 +36,7 @@ Plug 'jlanzarotta/bufexplorer'
 Plug 'chrisbra/csv.vim'
 Plug 'lambdalisue/suda.vim'
 Plug 'tpope/vim-rhubarb'
+Plug 'gregsexton/MatchTag'
 
 " Ruby
 Plug 'tpope/vim-rails'
@@ -56,6 +57,8 @@ let g:alchemist_tag_disable = 1
 Plug 'sheerun/vim-polyglot'
 Plug 'ludovicchabant/vim-gutentags'
 let g:gutentags_cache_dir = '~/.tags_cache'
+
+Plug 'Chiel92/vim-autoformat'
 
 " Frontend
 Plug 'groenewege/vim-less'
