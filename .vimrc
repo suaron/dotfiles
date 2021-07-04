@@ -1,74 +1,167 @@
-" set shell=$SHELL\ -l
+" https://github.com/mokevnin/dotfiles/blob/c16e2e3a87c1017505ac7820df0ea7181efe4bee/files/vimrc
+"
 set shell=bash
 
 set nocompatible
+
+" Set Leader
+let mapleader = ","
 
 let g:solarized_termcolors=256
 set background=dark
 
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
 call plug#begin('~/.vim/plugged')
 
-" Common
-Plug 'altercation/vim-colors-solarized'
-Plug 'ervandew/supertab'
-Plug 'junegunn/vim-easy-align'
-Plug 'mileszs/ack.vim', { 'tag': '1.0.9' }
-Plug 'plasticboy/vim-markdown'
+Plug 'chrisbra/matchit'
+:packadd! matchit
+
+" Projectionist provides granular project configuration using "projections"
+Plug 'tpope/vim-projectionist'
+
 Plug 'tpope/vim-abolish'
+
+" Targets.vim is a Vim plugin that adds various text objects to give you more targets to operate on
+Plug 'wellle/targets.vim'
+
+Plug 'hashivim/vim-terraform'
+let g:terraform_align=1
+
+" Syntax highlighting, matching rules and mappings for the original Markdown and extensions.
+Plug 'plasticboy/vim-markdown'
+
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+
+let g:snipMate = {}
+let g:snipMate.scope_aliases = {}
+let g:snipMate.scope_aliases['ruby'] = 'ruby,ruby-rails'
+
+let g:UltiSnipsExpandTrigger="<tab>"
+" list all snippets for current filetype
+let g:UltiSnipsListSnippets="<c-l>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
+
+Plug 'ntpeters/vim-better-whitespace'
+
+noremap <leader>ss :StripWhitespace<CR>
+
+Plug 'altercation/vim-colors-solarized'
+
+Plug 'dyng/ctrlsf.vim'
+
+map <leader>F :CtrlSF<space>
+
+Plug 'junegunn/vim-easy-align'
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+
 Plug 'tpope/vim-commentary'
+
+xmap \\  <Plug>Commentary<CR>
+nmap \\  <CR><Plug>Commentary
+nmap \\\ <Plug>CommentaryLine<CR>
+nmap \\u <Plug>CommentaryUndo<CR>
+
+Plug 'junegunn/fzf', {'dir': '~/.fzf','do': './install --all'}
+Plug 'junegunn/fzf.vim' " needed for previews
+
+" Mapping selecting mappings
+nmap <leader><tab> <plug>(fzf-maps-n)
+xmap <leader><tab> <plug>(fzf-maps-x)
+omap <leader><tab> <plug>(fzf-maps-o)
+
+" Insert mode completion
+imap <c-x><c-k> <plug>(fzf-complete-word)
+imap <c-x><c-f> <plug>(fzf-complete-path)
+imap <c-x><c-l> <plug>(fzf-complete-line)
+
+command! -bang -nargs=* GGrep
+      \ call fzf#vim#grep(
+      \   'git grep --line-number -- '.shellescape(<q-args>), 0,
+      \   fzf#vim#with_preview({'dir': systemlist('git rev-parse --show-toplevel')[0]}), <bang>0)
+
+command! -bang -nargs=* Rg
+      \ call fzf#vim#grep(
+      \   'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1,
+      \   fzf#vim#with_preview(), <bang>0)
+
+nnoremap <silent><nowait> <leader>b :Buffers<CR>
+nnoremap <silent><nowait> <leader>p :GFiles --cached --others --exclude-standard<CR>
+nnoremap <silent><nowait> <leader>g :GGrep<CR>
+nnoremap <silent><nowait> <leader>f :FZF<CR>
+
 Plug 'tpope/vim-endwise'
+
 Plug 'tpope/vim-eunuch'
+" :Delete: Delete a buffer and the file on disk simultaneously.
+" :Move: Rename a buffer and the file on disk simultaneously.
+" :Rename: Like :Move, but relative to the current file's containing directory.
+" :SudoWrite: Write a privileged file with sudo.
+" :SudoEdit: Edit a privileged file with sudo.
+
+" Git & Github
 Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-ragtag'
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-sensible'
-Plug 'tpope/vim-surround'
-Plug 'ctrlpvim/ctrlp.vim', { 'tag': '1.80' }
-Plug 'slim-template/vim-slim'
-Plug 'AndrewRadev/splitjoin.vim'
-Plug 'jlanzarotta/bufexplorer'
-Plug 'chrisbra/csv.vim'
-Plug 'lambdalisue/suda.vim'
 Plug 'tpope/vim-rhubarb'
-Plug 'gregsexton/MatchTag'
-Plug 'lifepillar/pgsql.vim'
+
+" A set of mappings for HTML, XML, PHP, ASP, eRuby, JSP, and more (formerly allml)
+Plug 'tpope/vim-ragtag'
+
+Plug 'scrooloose/nerdtree'
+nmap <silent> <leader><leader> :NERDTreeToggle<CR>
+nnoremap <C-n> :NERDTreeFind<CR>
+let NERDTreeIgnore = ['\.pyc$', '\.retry$']
+
+" https://github.com/tpope/vim-surround
+Plug 'tpope/vim-surround'
+
+" https://github.com/AndrewRadev/splitjoin.vim/blob/main/ftplugin/ruby/splitjoin.vim
+" gS to split a one-liner into multiple lines
+" gJ (with the cursor on the first line of a block) to join a block into a single-line statement.
+Plug 'AndrewRadev/splitjoin.vim'
+
+Plug 'ekalinin/Dockerfile.vim'
 
 " Ruby
 Plug 'tpope/vim-rails'
 Plug 'tpope/vim-rake'
 Plug 'tpope/vim-bundler'
-Plug 'kana/vim-textobj-user'
-Plug 'nelstrom/vim-textobj-rubyblock'
-Plug 'vim-ruby/vim-ruby', { 'tag': 'stable-20160928' }
 Plug 'aliou/sql-heredoc.vim'
+" Plug 'kana/vim-textobj-user'
+" Plug 'vim-ruby/vim-ruby'
+"
+Plug 'sheerun/vim-polyglot'
 
-" Elixir
-Plug 'elixir-lang/vim-elixir'
-Plug 'slashmili/alchemist.vim'
-Plug 'c-brenn/phoenix.vim'
-Plug 'tpope/vim-projectionist'
-let g:alchemist_tag_disable = 1
+" This plugin is provides file detection and syntax highlighting support for Prisma 2.
+Plug 'pantharshit00/vim-prisma'
 
 Plug 'sheerun/vim-polyglot'
+
 Plug 'ludovicchabant/vim-gutentags'
 let g:gutentags_cache_dir = '~/.tags_cache'
 
+Plug 'tpope/vim-sensible'
+
 Plug 'Chiel92/vim-autoformat'
 
-" Frontend
-Plug 'groenewege/vim-less'
-Plug 'kchmck/vim-coffee-script'
-Plug 'othree/html5.vim'
-Plug 'pangloss/vim-javascript'
-Plug 'posva/vim-vue'
-
 call plug#end()
+
+" https://github.com/vim/vim/blob/master/runtime/doc/russian.txt
+" Enable hotkeys for Russian layout
+set langmap=ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz
+
+" Use the system clipboard
+set clipboard=unnamed
 
 colorscheme solarized
 
@@ -80,22 +173,14 @@ set softtabstop=2
 set shiftwidth=2
 set tabstop=4
 
-set wildignore+=tags
-
 " Switch betwin buffers without savingl
 set hidden
 
 " Show line numbers
 set number
 
-" Cursor highlights
-set cursorline
-
 " Turn off folding
 set nofoldenable
-
-" Use the system clipboard
-set clipboard=unnamed
 
 " Indicator chars
 set showbreak=↪\
@@ -107,33 +192,11 @@ if has("autocmd")
   " In Makefiles, use real tabs, not tabs expanded to spaces
   au FileType make set noexpandtab
 
-  " Treat JSON files like JavaScript
-  au BufNewFile,BufRead *.json set ft=javascript
-
   " Remember last location in file, but not for commit messages.
   " see :help last-position-jump
   au BufReadPost * if &filetype !~ '^git\c' && line("'\"") > 0 && line("'\"") <= line("$")
         \| exe "normal! g`\"" | endif
-
-  au BufRead,BufNewFile {Procfile} set ft=ruby
-  au BufRead,BufNewFile {.localrc,localrc} set ft=sh
 endif
-
-" Set Leader
-let mapleader = ","
-
-" Move between open buffers.
-map <C-n> :bnext<CR>
-map <C-p> :bprev<CR>
-
-" Toggle spell check with <F5> for English
-map <F5> :setlocal spell! spelllang=en_us<cr>
-imap <F5> <ESC>:setlocal spell! spelllang=en_us<cr>
-
-" Toggle spell check with <F6> for Russian
-map <F6> :setlocal spell! spelllang=ru_RU<cr>
-imap <F6> <ESC>:setlocal spell! spelllang=ru_RU<cr>
-
 
 " Turn backup off
 set nobackup
@@ -151,6 +214,7 @@ set wildignore+=**/spec/reports   " ignores spec/reports
 set wildignore+=**/tmp/cache      " ignores tmp/cache
 set wildignore+=**/_build         " ignores elixir _build folder
 set wildignore+=**deps            " ignores elixir deps folder
+set wildignore+=tags
 
 set complete=.,w,b,u,t,i
 
@@ -163,6 +227,7 @@ set nowrap
 " Enable visual bell (disable audio bell)
 set vb
 set t_vb=
+set visualbell
 
 " Status bar
 set sidescrolloff=2
@@ -185,70 +250,24 @@ set smartcase
 " Have :s///g flag by default on
 set gdefault
 
-" Paste lines from unnamed register and fix indentation
-nmap <leader>p pV`]=
-nmap <leader>P PV`]=
-
 " You don't know what you're missing if you don't use this.
 nmap <C-e> :e#<CR>
 
 " In command-line mode, C-a jumps to beginning (to match C-e)
 cnoremap <C-a> <Home>
 
-:command WQ wq
-:command Wq wq
-:command W w
-:command Q q
-
 " http://vimcasts.org/e/14
 cnoremap %% <C-R>=expand('%:h').'/'<cr>
 cnoremap %$ <C-R>=expand('%:t:r')<cr>
 
-" Strip trailing whitespace (,ss)
-function! StripWhitespace()
-  let save_cursor = getpos(".")
-  let old_query = getreg('/')
-  :%s/\s\+$//e
-  call setpos('.', save_cursor)
-  call setreg('/', old_query)
-endfunction
-noremap <leader>ss :call StripWhitespace()<CR>
-
 " Clear the search buffer when hitting return
 nnoremap <CR> :nohlsearch<cr>
-
-map <leader>F :Ack<space>
-
-xmap \\  <Plug>Commentary<CR>
-nmap \\  <CR><Plug>Commentary
-nmap \\\ <Plug>CommentaryLine<CR>
-nmap \\u <Plug>CommentaryUndo<CR>
-
-map <leader>f :CtrlP <cr>
-
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
-let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
-let g:ctrlp_custom_ignore = {
-  \ 'dir':  '\v[\/]\.(git|hg|svn)$',
-  \ 'file': '\v\.(exe|so|dll)$',
-  \ 'link': 'some_bad_symbolic_links',
-  \ }
-let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
-
-let g:SuperTabDefaultCompletionType = "context"
-let g:SuperTabCompletionContexts = ['s:ContextText', 's:ContextDiscover']
-let g:SuperTabContextTextOmniPrecedence = ['&omnifunc', '&completefunc']
-let g:SuperTabContextDiscoverDiscovery = ["&completefunc:<c-x><c-u>", "&omnifunc:<c-x><c-o>"]
 
 " http://eduncan911.com/software/fix-slow-scrolling-in-vim-and-neovim.html
 set cursorline!
 set lazyredraw
 
 cabbrev help tab help
-
-" Start interactive EasyAlign in visual mode (e.g. vipga)
-xmap ga <Plug>(EasyAlign)
 
 " https://stackoverflow.com/questions/7000960/in-vim-why-doesnt-my-mouse-work-past-the-220th-column
 if has("mouse_sgr")
@@ -257,17 +276,37 @@ else
   set ttymouse=xterm2
 end
 
-" Start interactive EasyAlign for a motion/text object (e.g. gaip)
-nmap ga <Plug>(EasyAlign)
-
-let g:rails_projections = {
-\    "Gemfile": { "command": "gemfile"  }
-\ }
-
 if has('persistent_undo')      "check if your vim version supports it
-  set undofile                 "turn on the feature  
+  set undofile                 "turn on the feature
   set undodir=$HOME/.vim_undo  "directory where the undo files will be stored
 endif
 
-let g:sql_type_default = 'pgsql'
-let g:ruby_indent_block_style = 'do'
+function s:AutoMkdir(file, buf)
+  if empty(getbufvar(a:buf, '&buftype')) && a:file!~#'\v^\w+\:\/'
+    let dir=fnamemodify(a:file, ':h')
+    if !isdirectory(dir)
+      call mkdir(dir, 'p')
+    endif
+  endif
+endfunction
+
+autocmd BufWritePre * :call s:AutoMkdir(expand('<afile>'), +expand('<abuf>'))
+
+" Convert Ruby 1.8 hash syntax to Ruby 1.9 syntax
+" based on https://github.com/henrik/dotfiles/blob/master/vim/config/commands.vim#L20
+command! -bar -range=% NotRocket execute '<line1>,<line2>s/:\(\w\+\)\s*=>/\1:/e' . (&gdefault ? '' : 'g')
+
+" map markdown preview
+map <leader>m :!open -a "Marked 2" %<cr><cr>
+
+" TODO
+" Plug 'tpope/vim-repeat'
+" Plug 'puremourning/vimspector'
+" Plug 'dhruvasagar/vim-table-mode'
+" Plug 'tpope/vim-unimpaired'
+" Plug 'tpope/vim-repeat'
+" Plug 'Chiel92/vim-autoformat'
+" Plug 'rlue/vim-barbaric'
+" Plug 'tpope/vim-rake'
+" Plug 'vim-ruby/vim-ruby'
+" Plug 'vim-airline/vim-airline'
