@@ -101,3 +101,5 @@
 
 [push]
 	default = simple
+[commit]
+	template = /Users/dima/.git-template-commit

@@ -1,18 +1,23 @@
-all: dotfiles-install
+all: brew init-env install-tools
+
+all-upgrade: brew-upgrade nvim-upgrade cask-fonts-upgrade cask-upgrade mas-upgrade
 
 TAGS := all
 
-init: brew-setup
-
-brew-setup: brew-init brew-install brew-custom
+brew: brew-init brew-install brew-custom cask-install cask-fonts-install
 
 brew-init:
 	sudo -v
 	curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install | /usr/bin/ruby
 	brew update
-	brew tap homebrew/cask
 	brew tap heroku/brew
+	brew tap homebrew/bundle
+	brew tap homebrew/cask
+	brew tap homebrew/core
+	brew tap homebrew/services
+	brew tap homebrew/cask-drivers
 	brew tap homebrew/cask-fonts
+	brew tap homebrew/cask-versions
 
 BREW_LIST= \
 	neovim \
@@ -57,9 +62,6 @@ BREW_LIST= \
 brew-install:
 	-brew install $(BREW_LIST)
 
-brew-upgrade:
-	-brew upgrade $(BREW_LIST)
-
 brew-custom:
 	if ! fgrep -q '/usr/local/bin/bash' /etc/shells; then \
 		echo '/usr/local/bin/bash' | sudo tee -a /etc/shells; \
@@ -67,32 +69,30 @@ brew-custom:
 	fi;
 	brew install --HEAD universal-ctags/universal-ctags/universal-ctags
 
-init-env: folders-create item2-setup vim-setup xcode-setup aliases-create
+brew-upgrade:
+	-brew upgrade $(BREW_LIST)
+
+init-env: folders-create item2-setup vim-setup nvim-setup xcode-setup aliases-create
 
 folders-create:
-	-mkdir "$$HOME/Applications"
-	-mkdir "$$HOME/Archive"
-	-mkdir "$$HOME/Work"
-	-mkdir "$$HOME/projects"
-	-mkdir "$$HOME/code"
-	-mkdir "$$HOME/.tmp"
-	-mkdir "$$HOME/.ssh"
-	-mkdir "$$HOME/.ssh/control"
+	-mkdir "${HOME}/Applications"
+	-mkdir "${HOME}/Archive"
+	-mkdir "${HOME}/Work"
+	-mkdir "${HOME}/projects"
+	-mkdir "${HOME}/code"
+	-mkdir "${HOME}/.tmp"
+	-mkdir "${HOME}/.ssh"
+	-mkdir "${HOME}/.ssh/control"
 	-mkdir -p ~/.config/nvim
-	chmod 700 "$$HOME/.ssh"
-	-mkdir "$$HOME/.gnupg"
-	chmod 700 "$$HOME/.gnupg"
+	chmod 700 "${HOME}/.ssh"
+	-mkdir "${HOME}/.gnupg"
+	chmod 700 "${HOME}/.gnupg"
 
 # Install themes for Terminal and iTerm2
 item2-setup:
 	open "${PWD}/terminal/Solarized Dark Higher Contrast.itermcolors"
 	open "${PWD}/terminal/Solarized Dark xterm-256color.terminal"
 	open "${PWD}/terminal/Solarized Dark.itermcolors"
-
-install-npm:
-	sudo mkdir "/usr/local/lib/node_modules"
-	sudo chown -R $(whoami) "/usr/local/lib/node_modules"
-	npm install npm -g
 
 vim-setup:
 	-mkdir "${HOME}/.vim"
@@ -102,7 +102,6 @@ vim-setup:
 	-mkdir "${HOME}/.vim/swaps"
 	-mkdir "${HOME}/.vim/undo"
 	curl -LSso "${HOME}/.vim/autoload/plug.vim" "https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
-	-ln -sf ${PWD}/vim/plugin "${HOME}/.vim/plugin"
 	-ln -sf ${PWD}/vim/snapshot.vim "${HOME}/.vim/snapshot.vim"
 	-ln -sf ${PWD}/.vimrc "${HOME}"
 
@@ -111,6 +110,48 @@ nvim-setup:
 	ln -sf $(PWD)/nvim/init.vim ~/.config/nvim/init.vim
 	ln -sf $(PWD)/nvim/coc-settings.json ~/.config/nvim/coc-settings.json
 	ln -snf $(PWD)/nvim/vim-ftplugins ~/.config/nvim/ftplugin
+
+xcode-setup:
+	xcode-select --install &> /dev/null
+	# Wait until the XCode Command Line Tools are installed
+	until xcode-select --print-path &> /dev/null; do sleep 5; done
+	# Point the `xcode-select` developer directory to
+	# the appropriate directory from within `Xcode.app`
+	# https://github.com/alrra/dotfiles/issues/13
+	sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer
+	# Prompt user to agree to the terms of the Xcode license
+	# https://github.com/alrra/dotfiles/issues/10
+	sudo xcodebuild -license
+
+DOT_FILES_LIST= \
+	.ackrc \
+	.bash_profile \
+	.bashrc \
+	.ctags \
+	.dircolors \
+	.exports \
+	.gemrc \
+	.git-template-commit \
+	.gitconfig \
+	.gitignore \
+	.inputrc \
+	.irbrc \
+	.mackup.cfg \
+	.pryrc \
+	.psqlrc \
+
+aliases-create:
+	for dot_file in $(DOT_FILES_LIST) ; do \
+		ln -sf "${PWD}/$$dot_file" "${HOME}"; \
+	done
+	ln -sf "${PWD}/.bin" "${HOME}"
+
+install-tools: install-npm gem npm pip3
+
+install-npm:
+	sudo mkdir "/usr/local/lib/node_modules"
+	sudo chown -R $(whoami) "/usr/local/lib/node_modules"
+	npm install npm -g
 
 gem:
 	gem install solargraph rubocop neovim
@@ -135,47 +176,6 @@ nvim-upgrade:
 	nvim --headless +PlugUpdate +qall
 	nvim --headless +CocUpdate +qall
 
-xcode-setup:
-	xcode-select --install &> /dev/null
-	# Wait until the XCode Command Line Tools are installed
-	until xcode-select --print-path &> /dev/null; do sleep 5; done
-	# Point the `xcode-select` developer directory to
-	# the appropriate directory from within `Xcode.app`
-	# https://github.com/alrra/dotfiles/issues/13
-	sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer
-	# Prompt user to agree to the terms of the Xcode license
-	# https://github.com/alrra/dotfiles/issues/10
-	sudo xcodebuild -license
-
-DOT_FILES_LIST= \
-	.ackrc \
-	.aliases \
-	.bash_profile \
-	.bash_prompt \
-	.bashrc \
-	.ctags \
-	.dircolors \
-	.exports \
-	.extra \
-	.functions \
-	.gemrc \
-	.git-template-commit \
-	.gitconfig \
-	.gitignore \
-	.inputrc \
-	.irbrc \
-	.mackup.cfg \
-	.path \
-	.pryrc \
-	.psqlrc \
-	.tmux.conf \
-
-aliases-create:
-	for dot_file in $(DOT_FILES_LIST) ; do \
-		ln -sf "${PWD}/$$dot_file" "${HOME}"; \
-	done
-	ln -sf "${PWD}/.bin" "${HOME}"
-
 CASK_FONTS_LIST= \
 	font-domine \
 	font-fira-code \
@@ -189,9 +189,6 @@ cask-fonts-install:
 
 cask-fonts-upgrade:
 	brew upgrade --cask $(CASK_FONTS_LIST)
-
-setup-git:
-	git config --global commit.template ~/.git-template-commit
 
 CASK_LIST=\
 	1password \
