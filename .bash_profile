@@ -208,6 +208,8 @@ fi
 # Add `killall` tab completion for common apps.
 complete -o "nospace" -W "Contacts Calendar Dock Finder Mail Safari iTerm2 iTunes SystemUIServer Terminal Twitter" killall;
 
+complete -C /usr/local/bin/terraform terraform
+
 # z beats cd most of the time. `brew install z`
 zpath="$(brew --prefix)/etc/profile.d/z.sh"
 [ -s $zpath ] && source $zpath
