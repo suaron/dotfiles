@@ -22,7 +22,7 @@ IRB.conf[:PROMPT_MODE] = :CUSTOM
 
 # Automatic Indentation
 IRB.conf[:AUTO_INDENT] = true
- 
+
 # Load the readline module.
 IRB.conf[:USE_READLINE] = true
 
@@ -34,13 +34,13 @@ end
 
 # Awesome Print method
 require_ruby_gem("awesome_print")
- 
+
 # Tab Completion
 # Move from irb/completion => bond
 if require_ruby_gem 'bond'
   Bond.start
 end
- 
+
 if require_ruby_gem("wirble")
   # Wirble is a set of enhancements for irb
   # http://pablotron.org/software/wirble/README
