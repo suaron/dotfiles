@@ -170,7 +170,7 @@ bind Space:magic-space
 
 [[ -r "$(brew --prefix)/etc/profile.d/z.sh" ]] && . "$(brew --prefix)/etc/profile.d/z.sh"
 
-[[ -r "$HOME/.fzf.bash" ]] && . "$HOME/.fzf.bash"
+[ -f "$HOME/.fzf.bash" ] && . "$HOME/.fzf.bash"
 
 if hash poetry 2>/dev/null; then
   eval "poetry completions bash > $(brew --prefix)/etc/bash_completion.d/poetry.bash-completion";
