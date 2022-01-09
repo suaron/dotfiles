@@ -35,23 +35,20 @@ export LESS_TERMCAP_us=$'\E[04;38;5;146m' # begin underline
 #--------
 
 # Build, dedupe and then export PATH.
-PATH="$HOME/.bin"
+
+PATH="$PATH:node_modules/.bin:vendor/bin"
+PATH="$PATH:$HOME/.node-global-modules/bin"
+PATH="$PATH:$HOME/.rbenv/bin"
+PATH="$PATH:/opt/homebrew/opt/libpq/bin/"
+PATH="$PATH:$HOME/Library/Python/3.8/bin"
+PATH="$PATH:$HOME/.bin"
 PATH="$PATH:/usr/local/bin"
 PATH="$PATH:/usr/bin"
 PATH="$PATH:/usr/local/sbin"
 PATH="$PATH:/usr/sbin"
 PATH="$PATH:/sbin"
-PATH="/opt/homebrew/opt/coreutils/libexec/gnubin/:$PATH"
+PATH="$PATH:/opt/homebrew/opt/coreutils/libexec/gnubin"
 PATH="/opt/homebrew/bin:$PATH"
-
-# ligpq psql/pg_dump etc
-PATH=" /usr/local/opt/libpq/bin:$PATH"
-
-# Node -- use project specific binaries before global ones.
-PATH="node_modules/.bin:vendor/bin:$HOME/.node-global-modules/bin:$PATH"
-
-# rbenv
-PATH="$HOME/.rbenv/bin:$PATH"
 
 # Dedupe using awk.
 if hash awk 2>/dev/null; then
