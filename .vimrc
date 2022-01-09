@@ -148,7 +148,8 @@ Plug 'pantharshit00/vim-prisma'
 Plug 'sheerun/vim-polyglot'
 
 Plug 'ludovicchabant/vim-gutentags'
-let g:gutentags_cache_dir = '~/.tags_cache'
+let g:gutentags_cache_dir = '~/.vim/tags_cache'
+let g:gutentags_ctags_executable = '/opt/homebrew/bin/ctags'
 
 Plug 'tpope/vim-sensible'
 
