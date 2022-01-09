@@ -1,7 +1,7 @@
 # .gitignore
 # Mac OS X Finder and whatnot
 .DS_Store
- 
+
 # automatic backup files
 *~.nib
 *.swp
@@ -9,7 +9,7 @@
 *(Autosaved).rtfd/
 Backup[ ]of[ ]*.pages/
 Backup[ ]of[ ]*.key/
-Backup[ ]of[ ]*.numbers/" 
+Backup[ ]of[ ]*.numbers/"
 
 #rails
 log/*.log

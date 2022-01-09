@@ -36,20 +36,19 @@ export LESS_TERMCAP_us=$'\E[04;38;5;146m' # begin underline
 
 # Build, dedupe and then export PATH.
 PATH="$HOME/.bin"
-PATH="$PATH:$HOME/.local/bin"
 PATH="$PATH:/usr/local/bin"
 PATH="$PATH:/usr/bin"
-PATH="$PATH:/bin"
 PATH="$PATH:/usr/local/sbin"
 PATH="$PATH:/usr/sbin"
 PATH="$PATH:/sbin"
-PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+PATH="/opt/homebrew/opt/coreutils/libexec/gnubin/:$PATH"
+PATH="/opt/homebrew/bin:$PATH"
 
 # ligpq psql/pg_dump etc
 PATH=" /usr/local/opt/libpq/bin:$PATH"
 
 # Node -- use project specific binaries before global ones.
-# PATH="node_modules/.bin:vendor/bin:$HOME/.node-global-modules/bin:$PATH"
+PATH="node_modules/.bin:vendor/bin:$HOME/.node-global-modules/bin:$PATH"
 
 # rbenv
 PATH="$HOME/.rbenv/bin:$PATH"
@@ -73,9 +72,6 @@ fi
 alias be="bundle exec "
 
 alias gitlog="git reflog --pretty=raw | tig --pretty=raw"
-
-# Flush Directory Service cache
-alias flushdns="killall -HUP mDNSResponder"
 
 # Show/hide hidden files in Finder
 alias showhidden="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
@@ -105,43 +101,14 @@ fi;
 # List all files colorized
 alias ll="ls -la ${colorflag}"
 
-# List all files colorized in long format
-alias l="ls -lF ${colorflag}"
-
-# List only directories
-alias lsd="ls -l | grep --color=never '^d'"
-
 # Always enable colored `grep` output
 # Note: `GREP_OPTIONS="--color=auto"` is deprecated, hence the alias usage.
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
-# Silver Searcher
-alias ag='ag -f --hidden'
-
 # Recursively delete `.DS_Store` files
 alias dscleanup="find . -type f -name '*.DS_Store' -ls -delete"
-
-# Empty the Trash on all mounted volumes and the main HDD.
-# Also, clear Apple’s System Logs to improve shell startup speed.
-# Finally, clear download history from quarantine. https://mths.be/bum
-alias emptytrash=" \
-  sudo rm -rfv /Volumes/*/.Trashes; \
-  sudo rm -rfv $HOME/.Trash; \
-  sudo rm -rfv /private/var/log/asl/*.asl; \
-  sqlite3 $HOME/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* 'delete from LSQuarantineEvent' \
-"
-
-# Hide/show all desktop icons (useful when presenting)
-alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
-alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
-
-# Disable Spotlight
-alias spotoff="sudo mdutil -a -i off"
-
-# Enable Spotlight
-alias spoton="sudo mdutil -a -i on"
 
 #--------
 # FUNCTIONS
@@ -189,58 +156,34 @@ shopt -s dirspell 2> /dev/null
 # BASH COMPLETION
 # ---------------
 
-[[ -r "/usr/local/etc/profile.d/bash_completion.sh" ]] && . "/usr/local/etc/profile.d/bash_completion.sh"
-
-source "$(brew --prefix)/etc/bash_completion.d/brew"
-
-source "$(brew --prefix asdf)/etc/bash_completion.d/asdf.bash";
-
-source "$(brew --prefix)/etc/bash_completion.d/git-completion.bash"
-
-if hash poetry 2>/dev/null; then
-  eval "poetry completions bash > $(brew --prefix)/etc/bash_completion.d/poetry.bash-completion";
-fi
-
-[[ -r $NVM_DIR/bash_completion ]] && . $NVM_DIR/bash_completion
-
-[ -e "$HOME/.ssh/config" ] && complete -o "default" -o "nospace" -W "$(grep "^Host" $HOME/.ssh/config | grep -v "[?*]" | cut -d " " -f2- | tr ' ' '\n')" scp sftp ssh;
-
-# Add `killall` tab completion for common apps.
-complete -o "nospace" -W "Contacts Calendar Dock Finder Mail Safari iTerm2 iTunes SystemUIServer Terminal Twitter" killall;
-
-complete -C /usr/local/bin/terraform terraform
-
-# z beats cd most of the time. `brew install z`
-zpath="$(brew --prefix)/etc/profile.d/z.sh"
-[ -s $zpath ] && source $zpath
-
 # Enable history expansion with space.
 # e.g. typing !!<space> will replace the !! with your last command
 bind Space:magic-space
 
-# asdf
-source "$(brew --prefix asdf)/asdf.sh";
+[[ -r "$(brew --prefix)/etc/profile.d/bash_completion.sh" ]] && . "$(brew --prefix)/etc/profile.d/bash_completion.sh"
 
-# pyevnv
-if hash pyenv 2>/dev/null; then
-  eval "$(pyenv init -)";
+[[ -r "$(brew --prefix)/etc/bash_completion.d/brew" ]] && . "$(brew --prefix)/etc/profile.d/bash_completion.sh"
+
+[[ -r "$(brew --prefix)/etc/bash_completion.d/git-completion.bash" ]] && . "$(brew --prefix)/etc/bash_completion.d/git-completion.bash"
+
+[[ -r "$(brew --prefix)/etc/profile.d/z.sh" ]] && . "$(brew --prefix)/etc/profile.d/z.sh"
+
+[[ -r "$(brew --prefix)/etc/profile.d/z.sh" ]] && . "$(brew --prefix)/etc/profile.d/z.sh"
+
+[[ -r "$HOME/.fzf.bash" ]] && . "$HOME/.fzf.bash"
+
+if hash poetry 2>/dev/null; then
+  eval "poetry completions bash > $(brew --prefix)/etc/bash_completion.d/poetry.bash-completion";
 fi
-
-if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
 
 # rbenv
 if hash rbenv 2>/dev/null; then
   eval "$(rbenv init -)";
 fi
 
-# z beats cd most of the time. `brew install z`
-zpath="$(brew --prefix)/etc/profile.d/z.sh"
-[ -s $zpath ] && source $zpath
+[ -e "$HOME/.ssh/config" ] && complete -o "default" -o "nospace" -W "$(grep "^Host" $HOME/.ssh/config | grep -v "[?*]" | cut -d " " -f2- | tr ' ' '\n')" scp sftp ssh;
 
-# Enable history expansion with space.
-# e.g. typing !!<space> will replace the !! with your last command
-bind Space:magic-space
+[ -e "$(brew --prefix)/bin/terraform" ] && complete -C "$(brew --prefix)/bin/terraform" terraform
 
-complete -W "\`grep -oE '^[a-zA-Z0-9_-]+:([^=]|$)' Makefile | sed 's/[^a-zA-Z0-9_-]*$//'\`" make
-
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+# Add `killall` tab completion for common apps.
+complete -o "nospace" -W "Contacts Calendar Dock Finder Mail Safari iTerm2 iTunes SystemUIServer Terminal Twitter" killall;
