@@ -39,16 +39,10 @@ export LESS_TERMCAP_us=$'\E[04;38;5;146m' # begin underline
 PATH="$PATH:node_modules/.bin:vendor/bin"
 PATH="$PATH:$HOME/.node-global-modules/bin"
 PATH="$PATH:$HOME/.rbenv/bin"
-PATH="$PATH:/opt/homebrew/opt/libpq/bin/"
-PATH="$PATH:$HOME/Library/Python/3.8/bin"
 PATH="$PATH:$HOME/.bin"
-PATH="$PATH:/usr/local/bin"
-PATH="$PATH:/usr/bin"
-PATH="$PATH:/usr/local/sbin"
-PATH="$PATH:/usr/sbin"
-PATH="$PATH:/sbin"
-PATH="$PATH:/opt/homebrew/opt/coreutils/libexec/gnubin"
-PATH="/opt/homebrew/bin:$PATH"
+
+# Set PATH, MANPATH, etc., for Homebrew.
+eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # Dedupe using awk.
 if hash awk 2>/dev/null; then
@@ -161,6 +155,8 @@ bind Space:magic-space
 
 [[ -r "$(brew --prefix)/etc/bash_completion.d/brew" ]] && . "$(brew --prefix)/etc/profile.d/bash_completion.sh"
 
+[[ -r "$(brew --prefix)/etc/bash_completion.d/rg.bash" ]] && . "$(brew --prefix)/etc/bash_completion.d/rg.bash"
+
 [[ -r "$(brew --prefix)/etc/bash_completion.d/git-completion.bash" ]] && . "$(brew --prefix)/etc/bash_completion.d/git-completion.bash"
 
 [[ -r "$(brew --prefix)/etc/profile.d/z.sh" ]] && . "$(brew --prefix)/etc/profile.d/z.sh"
@@ -169,9 +165,9 @@ bind Space:magic-space
 
 [ -f "$HOME/.fzf.bash" ] && . "$HOME/.fzf.bash"
 
-if hash poetry 2>/dev/null; then
-  eval "poetry completions bash > $(brew --prefix)/etc/bash_completion.d/poetry.bash-completion";
-fi
+# if hash poetry 2>/dev/null; then
+#   eval "poetry completions bash > $(brew --prefix)/etc/bash_completion.d/poetry.bash-completion";
+# fi
 
 # rbenv
 if hash rbenv 2>/dev/null; then
@@ -184,3 +180,10 @@ fi
 
 # Add `killall` tab completion for common apps.
 complete -o "nospace" -W "Contacts Calendar Dock Finder Mail Safari iTerm2 iTunes SystemUIServer Terminal Twitter" killall;
+
+export DOCKER_BUILDKIT=0
+export COMPOSE_DOCKER_CLI_BUILD=0
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion

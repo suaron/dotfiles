@@ -35,6 +35,11 @@ let g:terraform_align=1
 " Syntax highlighting, matching rules and mappings for the original Markdown and extensions.
 Plug 'plasticboy/vim-markdown'
 
+" enable fenced code highlighting
+let g:markdown_fenced_languages = ['html', 'python', 'bash=sh', 'javascript', 'ruby', 'sql']
+set spell spelllang=en_us
+hi SpellBad term=standout cterm=standout,underline gui=underline
+
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 
@@ -76,6 +81,9 @@ nmap \\u <Plug>CommentaryUndo<CR>
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim' " needed for previews
 
+let NERDTreeShowHidden=1
+let $FZF_DEFAULT_COMMAND='rg --files --hidden'
+
 " Mapping selecting mappings
 nmap <leader><tab> <plug>(fzf-maps-n)
 xmap <leader><tab> <plug>(fzf-maps-x)
@@ -102,6 +110,8 @@ nnoremap <silent><nowait> <leader>g :GGrep<CR>
 nnoremap <silent><nowait> <leader>f :FZF<CR>
 
 Plug 'tpope/vim-endwise'
+
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 Plug 'tpope/vim-eunuch'
 " :Delete: Delete a buffer and the file on disk simultaneously.
@@ -155,6 +165,8 @@ Plug 'tpope/vim-sensible'
 
 Plug 'Chiel92/vim-autoformat'
 
+Plug 'thoughtbot/vim-rspec'
+
 call plug#end()
 
 " https://github.com/vim/vim/blob/master/runtime/doc/russian.txt
@@ -192,6 +204,8 @@ set mouse=a
 if has("autocmd")
   " In Makefiles, use real tabs, not tabs expanded to spaces
   au FileType make set noexpandtab
+
+  au FileType eruby.yaml setlocal commentstring=#\ %s
 
   " Remember last location in file, but not for commit messages.
   " see :help last-position-jump
